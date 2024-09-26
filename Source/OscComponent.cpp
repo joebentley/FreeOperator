@@ -9,10 +9,10 @@
 */
 
 #include <JuceHeader.h>
-#include "ADSRComponent.h"
+#include "OscComponent.h"
 
 //==============================================================================
-ADSRComponent::ADSRComponent(juce::AudioProcessorValueTreeState &parameters, const juce::String &parameterPrefix)
+OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, const juce::String &parameterPrefix)
 {
     addAndMakeVisible(attack);
     addAndMakeVisible(decay);
@@ -31,21 +31,44 @@ ADSRComponent::ADSRComponent(juce::AudioProcessorValueTreeState &parameters, con
     decayAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Decay", decay);
     sustainAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Sustain", sustain);
     releaseAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Release", release);
+    
+    addAndMakeVisible(attackLabel);
+    addAndMakeVisible(decayLabel);
+    addAndMakeVisible(sustainLabel);
+    addAndMakeVisible(releaseLabel);
+    attackLabel.setText("Attack", juce::dontSendNotification);
+    attackLabel.setJustificationType(juce::Justification::centredBottom);
+//    attackLabel.attachToComponent(&attack, false);
+    decayLabel.setText("Decay", juce::dontSendNotification);
+    decayLabel.setJustificationType(juce::Justification::centredBottom);
+//    decayLabel.attachToComponent(&decay, false);
+    sustainLabel.setText("Sustain", juce::dontSendNotification);
+    sustainLabel.setJustificationType(juce::Justification::centredBottom);
+//    sustainLabel.attachToComponent(&sustain, false);
+    releaseLabel.setText("Release", juce::dontSendNotification);
+    releaseLabel.setJustificationType(juce::Justification::centredBottom);
+//    releaseLabel.attachToComponent(&release, false);
 }
 
-ADSRComponent::~ADSRComponent()
+OscComponent::~OscComponent()
 {
 }
 
-void ADSRComponent::paint (juce::Graphics& g)
+void OscComponent::paint (juce::Graphics& g)
 {
 }
 
-void ADSRComponent::resized()
+void OscComponent::resized()
 {
-    auto adsrArea = getLocalBounds();
-    attack.setBounds(adsrArea.removeFromLeft(100));
-    decay.setBounds(adsrArea.removeFromLeft(100));
-    sustain.setBounds(adsrArea.removeFromLeft(100));
-    release.setBounds(adsrArea.removeFromLeft(100));
+    auto area = getLocalBounds();
+    auto labelArea = area.removeFromTop(40);
+    attackLabel.setBounds(labelArea.removeFromLeft(100));
+    decayLabel.setBounds(labelArea.removeFromLeft(100));
+    sustainLabel.setBounds(labelArea.removeFromLeft(100));
+    releaseLabel.setBounds(labelArea.removeFromLeft(100));
+    
+    attack.setBounds(area.removeFromLeft(100));
+    decay.setBounds(area.removeFromLeft(100));
+    sustain.setBounds(area.removeFromLeft(100));
+    release.setBounds(area.removeFromLeft(100));
 }

@@ -29,7 +29,7 @@ public:
     
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 private:
-    const float masterGain = juce::Decibels::decibelsToGain(-15.0);
+    const float masterGain = juce::Decibels::decibelsToGain(-10.0);
     
     juce::AudioBuffer<float> tempBuffer;
     
@@ -38,14 +38,10 @@ private:
         masterGainIndex
     };
     
-//    juce::dsp::ProcessorChain<CustomOscillator<float>, juce::dsp::Gain<float>> processorChain;
-//    juce::dsp::Oscillator<float> carrier;
-//    juce::dsp::Oscillator<float> modulator;
     Oscillator carrier;
     Oscillator modulator;
-    float carrierFrequency;
-    juce::AudioParameterFloat *fmDepth;
     
+    juce::AudioParameterFloat *fmDepth;
     juce::AudioParameterInt *coarseDetuningOsc1;
     juce::AudioParameterInt *coarseDetuningOsc2;
     

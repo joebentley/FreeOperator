@@ -5,9 +5,9 @@
               pluginAUMainType="'augn'">
   <MAINGROUP id="jjzn8P" name="FMsynth">
     <GROUP id="{5AA00DEB-E993-A848-8489-F660856A8DB0}" name="Source">
-      <FILE id="If7zvs" name="ADSRComponent.cpp" compile="1" resource="0"
-            file="Source/ADSRComponent.cpp"/>
-      <FILE id="bi3G4r" name="ADSRComponent.h" compile="0" resource="0" file="Source/ADSRComponent.h"/>
+      <FILE id="If7zvs" name="OscComponent.cpp" compile="1" resource="0"
+            file="Source/OscComponent.cpp"/>
+      <FILE id="bi3G4r" name="OscComponent.h" compile="0" resource="0" file="Source/OscComponent.h"/>
       <FILE id="DjZmBV" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
       <FILE id="CZ7k6k" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
       <FILE id="z8t0MJ" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>

@@ -30,9 +30,9 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     parameters.addParameterListener("osc2Sustain", this);
     parameters.addParameterListener("osc2Release", this);
     
-    fmDepth = static_cast<juce::AudioParameterFloat*>(parameters.getParameter("fmDepth"));
-    coarseDetuningOsc1 = static_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
-    coarseDetuningOsc2 = static_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
+    fmDepth = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("fmDepth"));
+    coarseDetuningOsc1 = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
+    coarseDetuningOsc2 = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
 }
 
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
@@ -44,19 +44,17 @@ void Voice::prepare(const juce::dsp::ProcessSpec& spec)
     
     carrier.setSampleRate((float)spec.sampleRate);
     modulator.setSampleRate((float)spec.sampleRate);
-//    processorChain.prepare(spec);
 }
 
 void Voice::noteStarted()
 {
-//    auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
+    auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
     carrier.setFrequency(coarseDetuningOsc1->get() * freqHz);
+    carrier.setAmplitude(velocity);
     modulator.setFrequency(coarseDetuningOsc2->get() * freqHz);
-    
-//    processorChain.get<oscIndex>().setFrequency (freqHz, true);
-//    processorChain.get<oscIndex>().setLevel (velocity);
+//    modulator.setAmplitude(velocity);
     
     adsrOsc1.setParameters(adsrParameters1);
     adsrOsc1.noteOn();
@@ -93,7 +91,7 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
 void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
     if (isActive() && adsrOsc1.isActive() == false) {
-        DBG("Main ADSR end");
+//        DBG("Main ADSR end");
         adsrOsc1.setParameters(adsrParameters1);
         adsrOsc2.setParameters(adsrParameters2);
         clearCurrentNote();

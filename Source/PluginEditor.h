@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "ADSRComponent.h"
+#include "OscComponent.h"
 
 //==============================================================================
 /**
@@ -36,8 +36,8 @@ private:
     juce::MidiKeyboardState midiKeyboardState;
     juce::MidiKeyboardComponent midiKeyboardComponent { midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 
-    ADSRComponent adsr1;
-    ADSRComponent adsr2;
+    OscComponent osc1;
+    OscComponent osc2;
     juce::Slider fmDepth;
     juce::Slider coarseOsc1;
     juce::Slider coarseOsc2;

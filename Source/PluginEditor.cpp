@@ -11,16 +11,16 @@
 
 //==============================================================================
 FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), audioProcessor (p), adsr1(vts, "osc1"), adsr2(vts, "osc2"), parameters(vts)
+: AudioProcessorEditor (&p), audioProcessor (p), osc1(vts, "osc1"), osc2(vts, "osc2"), parameters(vts)
 {
     addAndMakeVisible(midiKeyboardComponent);
     midiKeyboardComponent.setMidiChannel(2);
     
-    addAndMakeVisible(adsr1);
-    adsr1.setName("adsrOsc1");
+    addAndMakeVisible(osc1);
+    osc1.setName("adsrOsc1");
     
-    addAndMakeVisible(adsr2);
-    adsr2.setName("adsrOsc2");
+    addAndMakeVisible(osc2);
+    osc2.setName("adsrOsc2");
     
     addAndMakeVisible(fmDepth);
     fmDepth.setName("fmDepth");
@@ -40,7 +40,7 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     coarseOsc2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     coarseOsc2Attachment = std::make_unique<SliderAttachment>(parameters, "osc2Coarse", coarseOsc2);
     
-    setSize (400, 600);
+    setSize (600, 600);
     
     midiKeyboardState.addListener(&audioProcessor.getMidiMessageCollector());
 }
@@ -68,11 +68,9 @@ void FMsynthAudioProcessorEditor::resized()
         midiKeyboardComponent.setBounds(area.removeFromTop(80));
     }
     
-    auto adsrArea = area.removeFromTop(150);
-    adsr1.setBounds(adsrArea);
+    osc1.setBounds(area.removeFromTop(150));
     
-    auto adsrArea2 = area.removeFromTop(150);
-    adsr2.setBounds(adsrArea2);
+    osc2.setBounds(area.removeFromTop(150));
     
     auto fmDepthArea = area.removeFromTop(150);
     fmDepth.setBounds(fmDepthArea.removeFromLeft(100));

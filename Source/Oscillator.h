@@ -19,6 +19,7 @@ public:
     void setSampleRate(float sampleRate) { this->sampleRate = sampleRate; }
     void setFrequency(float frequency) { this->frequency = frequency; }
     void setPhaseOffset(float phaseOffset) { this->phaseOffset = phaseOffset; }
+    void setAmplitude(float amplitude) { this->amplitude = amplitude; }
     
     float processSample();
     
@@ -28,6 +29,7 @@ private:
     float phaseOffset = 0.0;
     float frequency = 440.0;
     float sampleRate = 0.0;
+    float amplitude = 1.0;
     
     JUCE_DECLARE_NON_COPYABLE(Oscillator)
 };
