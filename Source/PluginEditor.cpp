@@ -64,7 +64,9 @@ void FMsynthAudioProcessorEditor::paint (juce::Graphics& g)
 void FMsynthAudioProcessorEditor::resized()
 {
     auto area = getLocalBounds();
-    midiKeyboardComponent.setBounds(area.removeFromTop(80));
+    if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone) {
+        midiKeyboardComponent.setBounds(area.removeFromTop(80));
+    }
     
     auto adsrArea = area.removeFromTop(150);
     adsr1.setBounds(adsrArea);

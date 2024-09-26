@@ -30,9 +30,9 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     parameters.addParameterListener("osc2Sustain", this);
     parameters.addParameterListener("osc2Release", this);
     
-    fmDepth = parameters.getParameter("fmDepth");
-    coarseDetuningOsc1 = parameters.getParameter("osc1Coarse");
-    coarseDetuningOsc2 = parameters.getParameter("osc2Coarse");
+    fmDepth = static_cast<juce::AudioParameterFloat*>(parameters.getParameter("fmDepth"));
+    coarseDetuningOsc1 = static_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
+    coarseDetuningOsc2 = static_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
 }
 
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
@@ -52,8 +52,8 @@ void Voice::noteStarted()
 //    auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
-    carrier.setFrequency(dynamic_cast<juce::AudioParameterInt*>(coarseDetuningOsc1)->get() * freqHz);
-    modulator.setFrequency(dynamic_cast<juce::AudioParameterInt*>(coarseDetuningOsc2)->get() * freqHz);
+    carrier.setFrequency(coarseDetuningOsc1->get() * freqHz);
+    modulator.setFrequency(coarseDetuningOsc2->get() * freqHz);
     
 //    processorChain.get<oscIndex>().setFrequency (freqHz, true);
 //    processorChain.get<oscIndex>().setLevel (velocity);
@@ -100,7 +100,7 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
         return;
     }
     
-    auto fmDepthValue = dynamic_cast<juce::AudioParameterFloat*>(fmDepth)->get();
+    auto fmDepthValue = fmDepth->get();
     
     auto audioBlock = juce::dsp::AudioBlock<float>(tempBuffer).getSubBlock(startSample, numSamples);
     audioBlock.clear();

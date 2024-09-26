@@ -44,10 +44,10 @@ private:
     Oscillator carrier;
     Oscillator modulator;
     float carrierFrequency;
-    juce::RangedAudioParameter *fmDepth;
+    juce::AudioParameterFloat *fmDepth;
     
-    juce::RangedAudioParameter *coarseDetuningOsc1;
-    juce::RangedAudioParameter *coarseDetuningOsc2;
+    juce::AudioParameterInt *coarseDetuningOsc1;
+    juce::AudioParameterInt *coarseDetuningOsc2;
     
     juce::ADSR adsrOsc1;
     juce::ADSR adsrOsc2;
