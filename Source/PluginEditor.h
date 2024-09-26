@@ -38,6 +38,12 @@ private:
 
     OscComponent osc1;
     OscComponent osc2;
+    OscComponent osc3;
+    OscComponent osc4;
+    
+    juce::Slider algorithm;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;
+//    juce::Label algorithmLabel;
     
     juce::AudioProcessorValueTreeState &parameters;
     

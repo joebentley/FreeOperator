@@ -11,18 +11,31 @@
 
 //==============================================================================
 FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), audioProcessor (p), osc1(vts, "osc1"), osc2(vts, "osc2"), parameters(vts)
+: AudioProcessorEditor (&p), audioProcessor (p), osc1(vts, 1), osc2(vts, 2), osc3(vts, 3), osc4(vts, 4), parameters(vts)
 {
     addAndMakeVisible(midiKeyboardComponent);
     midiKeyboardComponent.setMidiChannel(2);
     
     addAndMakeVisible(osc1);
-    
     addAndMakeVisible(osc2);
+    addAndMakeVisible(osc3);
+    addAndMakeVisible(osc4);
     
-    setSize (600, 600);
+    int width = 550;
+    int height = 500;
+    if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
+        height += 80;
+    setSize (width, height);
     
     midiKeyboardState.addListener(&audioProcessor.getMidiMessageCollector());
+    
+    addAndMakeVisible(algorithm);
+    algorithm.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    algorithm.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    algorithmAttachment = std::make_unique<SliderAttachment>(parameters, "algorithm", algorithm);
+    
+//    addAndMakeVisible(algorithmLabel);
+//    algorithmLabel.setText("Algorithm", juce::dontSendNotification);
 }
 
 FMsynthAudioProcessorEditor::~FMsynthAudioProcessorEditor()
@@ -44,11 +57,13 @@ void FMsynthAudioProcessorEditor::paint (juce::Graphics& g)
 void FMsynthAudioProcessorEditor::resized()
 {
     auto area = getLocalBounds();
-    if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone) {
+    if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
         midiKeyboardComponent.setBounds(area.removeFromTop(80));
-    }
     
-    osc1.setBounds(area.removeFromTop(150));
+    osc4.setBounds(area.removeFromTop(130));
+    osc3.setBounds(area.removeFromTop(90));
+    osc2.setBounds(area.removeFromTop(90));
+    osc1.setBounds(area.removeFromTop(90));
     
-    osc2.setBounds(area.removeFromTop(150));
+    algorithm.setBounds(area.removeFromTop(90));
 }

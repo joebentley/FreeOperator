@@ -25,33 +25,40 @@ public:
     void noteTimbreChanged()   override {}
     void noteKeyStateChanged() override {}
     
-    void parameterChanged (const juce::String& parameterID, float newValue) override;
-    
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 private:
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    float renderSampleForAlgorithm();
+    
     const float masterGain = juce::Decibels::decibelsToGain(-10.0);
     
     juce::AudioBuffer<float> tempBuffer;
     
-    enum {
-        oscIndex,
-        masterGainIndex
-    };
-    
     float noteVelocity = 0.0;
+    int algorithm = 0;
     
-    Oscillator carrier;
-    Oscillator modulator;
+    Oscillator osc1;
+    Oscillator osc2;
+    Oscillator osc3;
+    Oscillator osc4;
     
     juce::AudioParameterFloat *osc1Volume;
     juce::AudioParameterFloat *osc2Volume;
+    juce::AudioParameterFloat *osc3Volume;
+    juce::AudioParameterFloat *osc4Volume;
     juce::AudioParameterInt *osc1Coarse;
     juce::AudioParameterInt *osc2Coarse;
+    juce::AudioParameterInt *osc3Coarse;
+    juce::AudioParameterInt *osc4Coarse;
     
     juce::ADSR adsrOsc1;
     juce::ADSR adsrOsc2;
+    juce::ADSR adsrOsc3;
+    juce::ADSR adsrOsc4;
     juce::ADSR::Parameters adsrParameters1;
     juce::ADSR::Parameters adsrParameters2;
+    juce::ADSR::Parameters adsrParameters3;
+    juce::ADSR::Parameters adsrParameters4;
     
     juce::AudioProcessorValueTreeState &parameters;
 };

@@ -19,24 +19,24 @@ class OscComponent  : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 public:
-    OscComponent(juce::AudioProcessorValueTreeState &parameters, const juce::String &parameterPrefix);
+    OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
     ~OscComponent() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
     
 private:
-    static constexpr int rotaryBoxWidth = 80;
+    static constexpr int rotaryBoxWidth = 70;
     static constexpr int rotaryBoxHeight = 20;
+    static constexpr int rotaryWidth = 80;
+    
+    int oscNumber;
     
     juce::Slider attack, decay, sustain, release, coarseOsc, volume;
-    juce::Label attackLabel, decayLabel, sustainLabel, releaseLabel, coarseOscLabel, volumeLabel;
-    std::unique_ptr<SliderAttachment> attackAttachment;
-    std::unique_ptr<SliderAttachment> decayAttachment;
-    std::unique_ptr<SliderAttachment> sustainAttachment;
-    std::unique_ptr<SliderAttachment> releaseAttachment;
-    std::unique_ptr<SliderAttachment> coarseOscAttachment;
-    std::unique_ptr<SliderAttachment> volumeAttachment;
+    juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseOscLabel, volumeLabel;
+    
+    std::unique_ptr<SliderAttachment> attackAttachment, decayAttachment, sustainAttachment,
+        releaseAttachment, coarseOscAttachment, volumeAttachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };
