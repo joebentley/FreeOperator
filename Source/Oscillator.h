@@ -1,0 +1,33 @@
+/*
+  ==============================================================================
+
+    Oscillator.h
+    Created: 22 Sep 2024 10:36:24pm
+    Author:  Joe Bentley
+
+  ==============================================================================
+*/
+
+#pragma once
+#include <JuceHeader.h>
+
+class Oscillator
+{
+public:
+    Oscillator();
+    
+    void setSampleRate(float sampleRate) { this->sampleRate = sampleRate; }
+    void setFrequency(float frequency) { this->frequency = frequency; }
+    void setPhaseOffset(float phaseOffset) { this->phaseOffset = phaseOffset; }
+    
+    float processSample();
+    
+private:
+    juce::Array<float> lookupTable;
+    float phase = 0.0;
+    float phaseOffset = 0.0;
+    float frequency = 440.0;
+    float sampleRate = 0.0;
+    
+    JUCE_DECLARE_NON_COPYABLE(Oscillator)
+};
