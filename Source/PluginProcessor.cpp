@@ -25,17 +25,18 @@ FMsynthAudioProcessor::FMsynthAudioProcessor()
                      #endif
                        ),
 parameters(*this, nullptr, juce::Identifier("FMSynth"), {
-    std::make_unique<juce::AudioParameterFloat>(pid("osc1Attack", 1),   "Osc 1 Attack",     nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.01f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc1Decay", 1),    "Osc 1 Decay",      nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.2f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc1Sustain", 1),  "Osc 1 Sustain",    nrf(0.0f, 1.0f, 0.0000001f), 0.6f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc1Release", 1),  "Osc 1 Release",    nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.1f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc2Attack", 1),   "Osc 2 Attack",     nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.01f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc2Decay", 1),    "Osc 2 Decay",      nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.2f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc2Sustain", 1),  "Osc 2 Sustain",    nrf(0.0f, 1.0f, 0.0000001f), 1.0f),
-    std::make_unique<juce::AudioParameterFloat>(pid("osc2Release", 1),  "Osc 2 Release",    nrf(0.0f, 50.0f, 0.0000001f, 0.4f), 0.1f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc1Attack", 1),   "Osc 1 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.01f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc1Decay", 1),    "Osc 1 Decay",      nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.2f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc1Sustain", 1),  "Osc 1 Sustain",    nrf(0.0f, 1.0f, 0.00001f), 0.6f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc1Release", 1),  "Osc 1 Release",    nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.1f),
     std::make_unique<juce::AudioParameterInt>(  pid("osc1Coarse", 1),   "Osc 1 Coarse",     1, 10, 1),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc1Volume", 1),   "Osc 1 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 1.0f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc2Attack", 1),   "Osc 2 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.01f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc2Decay", 1),    "Osc 2 Decay",      nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.2f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc2Sustain", 1),  "Osc 2 Sustain",    nrf(0.0f, 1.0f, 0.00001f), 1.0f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc2Release", 1),  "Osc 2 Release",    nrf(0.0f, 50.0f, 0.00001f, 0.4f), 0.1f),
     std::make_unique<juce::AudioParameterInt>(  pid("osc2Coarse", 1),   "Osc 2 Coarse",     1, 10, 1),
-    std::make_unique<juce::AudioParameterFloat>(pid("fmDepth", 1),      "FM Depth",         nrf(0.0f, 1.0f, 0.0000001f, 0.3f), 0.0f),
+    std::make_unique<juce::AudioParameterFloat>(pid("osc2Volume", 1),   "Osc 2 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f)
 }),
 audioEngine(parameters)
 #endif

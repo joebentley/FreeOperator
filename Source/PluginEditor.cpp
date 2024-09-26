@@ -17,28 +17,8 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     midiKeyboardComponent.setMidiChannel(2);
     
     addAndMakeVisible(osc1);
-    osc1.setName("adsrOsc1");
     
     addAndMakeVisible(osc2);
-    osc2.setName("adsrOsc2");
-    
-    addAndMakeVisible(fmDepth);
-    fmDepth.setName("fmDepth");
-    fmDepth.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    fmDepth.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    fmDepthAttachment = std::make_unique<SliderAttachment>(parameters, "fmDepth", fmDepth);
-    
-    addAndMakeVisible(coarseOsc1);
-    coarseOsc1.setName("coarseOsc1");
-    coarseOsc1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    coarseOsc1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    coarseOsc1Attachment = std::make_unique<SliderAttachment>(parameters, "osc1Coarse", coarseOsc1);
-    
-    addAndMakeVisible(coarseOsc2);
-    coarseOsc2.setName("coarseOsc2");
-    coarseOsc2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    coarseOsc2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    coarseOsc2Attachment = std::make_unique<SliderAttachment>(parameters, "osc2Coarse", coarseOsc2);
     
     setSize (600, 600);
     
@@ -71,9 +51,4 @@ void FMsynthAudioProcessorEditor::resized()
     osc1.setBounds(area.removeFromTop(150));
     
     osc2.setBounds(area.removeFromTop(150));
-    
-    auto fmDepthArea = area.removeFromTop(150);
-    fmDepth.setBounds(fmDepthArea.removeFromLeft(100));
-    coarseOsc1.setBounds(fmDepthArea.removeFromLeft(100));
-    coarseOsc2.setBounds(fmDepthArea.removeFromLeft(100));
 }

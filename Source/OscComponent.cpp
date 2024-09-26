@@ -38,16 +38,30 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, const
     addAndMakeVisible(releaseLabel);
     attackLabel.setText("Attack", juce::dontSendNotification);
     attackLabel.setJustificationType(juce::Justification::centredBottom);
-//    attackLabel.attachToComponent(&attack, false);
     decayLabel.setText("Decay", juce::dontSendNotification);
     decayLabel.setJustificationType(juce::Justification::centredBottom);
-//    decayLabel.attachToComponent(&decay, false);
     sustainLabel.setText("Sustain", juce::dontSendNotification);
     sustainLabel.setJustificationType(juce::Justification::centredBottom);
-//    sustainLabel.attachToComponent(&sustain, false);
     releaseLabel.setText("Release", juce::dontSendNotification);
     releaseLabel.setJustificationType(juce::Justification::centredBottom);
-//    releaseLabel.attachToComponent(&release, false);
+    
+    addAndMakeVisible(coarseOsc);
+    coarseOsc.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    coarseOsc.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    coarseOscAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Coarse", coarseOsc);
+    
+    addAndMakeVisible(coarseOscLabel);
+    coarseOscLabel.setText("Coarse", juce::dontSendNotification);
+    coarseOscLabel.setJustificationType(juce::Justification::centredBottom);
+    
+    addAndMakeVisible(volume);
+    volume.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    volume.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    volumeAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Volume", volume);
+    
+    addAndMakeVisible(volumeLabel);
+    volumeLabel.setText("Level", juce::dontSendNotification);
+    volumeLabel.setJustificationType(juce::Justification::centredBottom);
 }
 
 OscComponent::~OscComponent()
@@ -66,9 +80,13 @@ void OscComponent::resized()
     decayLabel.setBounds(labelArea.removeFromLeft(100));
     sustainLabel.setBounds(labelArea.removeFromLeft(100));
     releaseLabel.setBounds(labelArea.removeFromLeft(100));
+    coarseOscLabel.setBounds(labelArea.removeFromLeft(100));
+    volumeLabel.setBounds(labelArea.removeFromLeft(100));
     
     attack.setBounds(area.removeFromLeft(100));
     decay.setBounds(area.removeFromLeft(100));
     sustain.setBounds(area.removeFromLeft(100));
     release.setBounds(area.removeFromLeft(100));
+    coarseOsc.setBounds(area.removeFromLeft(100));
+    volume.setBounds(area.removeFromLeft(100));
 }

@@ -38,12 +38,15 @@ private:
         masterGainIndex
     };
     
+    float noteVelocity = 0.0;
+    
     Oscillator carrier;
     Oscillator modulator;
     
-    juce::AudioParameterFloat *fmDepth;
-    juce::AudioParameterInt *coarseDetuningOsc1;
-    juce::AudioParameterInt *coarseDetuningOsc2;
+    juce::AudioParameterFloat *osc1Volume;
+    juce::AudioParameterFloat *osc2Volume;
+    juce::AudioParameterInt *osc1Coarse;
+    juce::AudioParameterInt *osc2Coarse;
     
     juce::ADSR adsrOsc1;
     juce::ADSR adsrOsc2;

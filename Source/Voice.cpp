@@ -30,9 +30,10 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     parameters.addParameterListener("osc2Sustain", this);
     parameters.addParameterListener("osc2Release", this);
     
-    fmDepth = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("fmDepth"));
-    coarseDetuningOsc1 = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
-    coarseDetuningOsc2 = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
+    osc1Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1Volume"));
+    osc2Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2Volume"));
+    osc1Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
+    osc2Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
 }
 
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
@@ -51,10 +52,10 @@ void Voice::noteStarted()
     auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
-    carrier.setFrequency(coarseDetuningOsc1->get() * freqHz);
-    carrier.setAmplitude(velocity);
-    modulator.setFrequency(coarseDetuningOsc2->get() * freqHz);
-//    modulator.setAmplitude(velocity);
+    carrier.setFrequency(osc1Coarse->get() * freqHz);
+    modulator.setFrequency(osc2Coarse->get() * freqHz);
+    
+    noteVelocity = velocity;
     
     adsrOsc1.setParameters(adsrParameters1);
     adsrOsc1.noteOn();
@@ -98,7 +99,8 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
         return;
     }
     
-    auto fmDepthValue = fmDepth->get();
+    carrier.setAmplitude(osc1Volume->get());
+    modulator.setAmplitude(osc2Volume->get());
     
     auto audioBlock = juce::dsp::AudioBlock<float>(tempBuffer).getSubBlock(startSample, numSamples);
     audioBlock.clear();
@@ -108,11 +110,11 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
         
         modulation *= adsrOsc2.getNextSample();
 
-        carrier.setPhaseOffset(fmDepthValue * modulation);
+        carrier.setPhaseOffset(modulation);
         
         auto sample = carrier.processSample();
         
-        sample *= masterGain;
+        sample *= noteVelocity * masterGain;
         
         audioBlock.setSample(0, s, sample);
         audioBlock.setSample(1, s, sample);

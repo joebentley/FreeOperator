@@ -38,15 +38,8 @@ private:
 
     OscComponent osc1;
     OscComponent osc2;
-    juce::Slider fmDepth;
-    juce::Slider coarseOsc1;
-    juce::Slider coarseOsc2;
     
     juce::AudioProcessorValueTreeState &parameters;
-    
-    std::unique_ptr<SliderAttachment> fmDepthAttachment;
-    std::unique_ptr<SliderAttachment> coarseOsc1Attachment;
-    std::unique_ptr<SliderAttachment> coarseOsc2Attachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FMsynthAudioProcessorEditor)
 };
