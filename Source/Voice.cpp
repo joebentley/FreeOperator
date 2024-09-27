@@ -55,8 +55,8 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     osc3Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3Coarse"));
     osc4Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4Coarse"));
     
-    
     parameters.addParameterListener("algorithm", this);
+    algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
 }
 
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
@@ -100,6 +100,8 @@ void Voice::noteStopped(bool)
 {
     adsrOsc1.noteOff();
     adsrOsc2.noteOff();
+    adsrOsc3.noteOff();
+    adsrOsc4.noteOff();
 }
 
 void Voice::parameterChanged (const juce::String& parameterID, float newValue)
@@ -192,6 +194,23 @@ float Voice::renderSampleForAlgorithm()
             auto osc3Sample = osc3.processSample();
             osc3Sample *= adsrOsc3.getNextSample();
             osc2.setPhaseOffset(osc3Sample);
+            auto osc2Sample = osc2.processSample();
+            osc2Sample *= adsrOsc2.getNextSample();
+            osc1.setPhaseOffset(osc2Sample);
+            
+            sample = osc1.processSample();
+            
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 2: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc2.setPhaseOffset(osc4Sample + osc3Sample);
             auto osc2Sample = osc2.processSample();
             osc2Sample *= adsrOsc2.getNextSample();
             osc1.setPhaseOffset(osc2Sample);

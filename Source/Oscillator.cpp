@@ -19,6 +19,14 @@ Oscillator::Oscillator()
     }
 }
 
+void Oscillator::setPhaseOffset(float phaseOffset)
+{
+    // simple lpf (not sure if this is doing anything)
+    auto thisPhaseOffset = this->phaseOffset;
+    this->phaseOffset = 0.5f * (phaseOffset + lastPhaseOffset);
+    lastPhaseOffset = thisPhaseOffset;
+}
+
 float Oscillator::processSample()
 {
     phase += frequency * (1.f / sampleRate) + phaseOffset;
