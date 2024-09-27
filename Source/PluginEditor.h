@@ -43,7 +43,7 @@ private:
     
     juce::Slider algorithm;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;
-//    juce::Label algorithmLabel;
+    juce::Label algorithmLabel;
     
     juce::AudioProcessorValueTreeState &parameters;
     

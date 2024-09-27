@@ -34,8 +34,8 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     algorithm.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     algorithmAttachment = std::make_unique<SliderAttachment>(parameters, "algorithm", algorithm);
     
-//    addAndMakeVisible(algorithmLabel);
-//    algorithmLabel.setText("Algorithm", juce::dontSendNotification);
+    addAndMakeVisible(algorithmLabel);
+    algorithmLabel.setText("Algorithm", juce::dontSendNotification);
 }
 
 FMsynthAudioProcessorEditor::~FMsynthAudioProcessorEditor()
@@ -65,5 +65,7 @@ void FMsynthAudioProcessorEditor::resized()
     osc2.setBounds(area.removeFromTop(90));
     osc1.setBounds(area.removeFromTop(90));
     
-    algorithm.setBounds(area.removeFromTop(90));
+    auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(200);
+    algorithmLabel.setBounds(algorithmArea.removeFromLeft(90));
+    algorithm.setBounds(algorithmArea.removeFromLeft(90));
 }
