@@ -168,11 +168,6 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
         audioBlock.setSample(1, s, sample);
     }
     
-//    juce::dsp::ProcessContextReplacing<float> context(audioBlock);
-//    processorChain.process(context);
-    
-    adsrOsc1.applyEnvelopeToBuffer(tempBuffer, startSample, numSamples);
-    
     juce::dsp::AudioBlock<float>(outputBuffer)
         .getSubBlock((size_t)startSample, (size_t)numSamples)
         .add(audioBlock);
@@ -199,7 +194,7 @@ float Voice::renderSampleForAlgorithm()
             osc1.setPhaseOffset(osc2Sample);
             
             sample = osc1.processSample();
-            
+            sample *= adsrOsc1.getNextSample();
             sample *= noteVelocity * masterGain;
             break;
         }
@@ -216,7 +211,7 @@ float Voice::renderSampleForAlgorithm()
             osc1.setPhaseOffset(osc2Sample);
             
             sample = osc1.processSample();
-            
+            sample *= adsrOsc1.getNextSample();
             sample *= noteVelocity * masterGain;
             break;
         }
