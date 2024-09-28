@@ -36,10 +36,7 @@ private:
     juce::MidiKeyboardState midiKeyboardState;
     juce::MidiKeyboardComponent midiKeyboardComponent { midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 
-    OscComponent osc1;
-    OscComponent osc2;
-    OscComponent osc3;
-    OscComponent osc4;
+    OscComponents oscs;
     
     juce::Slider algorithm;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;

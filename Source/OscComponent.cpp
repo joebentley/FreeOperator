@@ -77,10 +77,6 @@ OscComponent::~OscComponent()
 {
 }
 
-void OscComponent::paint (juce::Graphics& g)
-{
-}
-
 void OscComponent::resized()
 {
     auto area = getLocalBounds();
@@ -103,4 +99,13 @@ void OscComponent::resized()
     release.setBounds(area.removeFromLeft(rotaryWidth));
     coarseOsc.setBounds(area.removeFromLeft(rotaryWidth));
     volume.setBounds(area.removeFromLeft(rotaryWidth));
+}
+
+void OscComponents::resized()
+{
+    auto area = getLocalBounds();
+    osc4.setBounds(area.removeFromTop(130));
+    osc3.setBounds(area.removeFromTop(90));
+    osc2.setBounds(area.removeFromTop(90));
+    osc1.setBounds(area.removeFromTop(90));
 }

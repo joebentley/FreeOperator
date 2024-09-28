@@ -11,15 +11,12 @@
 
 //==============================================================================
 FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), audioProcessor (p), osc1(vts, 1), osc2(vts, 2), osc3(vts, 3), osc4(vts, 4), parameters(vts)
+: AudioProcessorEditor (&p), audioProcessor (p), oscs(vts), parameters(vts)
 {
     addAndMakeVisible(midiKeyboardComponent);
     midiKeyboardComponent.setMidiChannel(2);
     
-    addAndMakeVisible(osc1);
-    addAndMakeVisible(osc2);
-    addAndMakeVisible(osc3);
-    addAndMakeVisible(osc4);
+    addAndMakeVisible(oscs);
     
     int width = 550;
     int height = 500;
@@ -60,10 +57,7 @@ void FMsynthAudioProcessorEditor::resized()
     if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
         midiKeyboardComponent.setBounds(area.removeFromTop(80));
     
-    osc4.setBounds(area.removeFromTop(130));
-    osc3.setBounds(area.removeFromTop(90));
-    osc2.setBounds(area.removeFromTop(90));
-    osc1.setBounds(area.removeFromTop(90));
+    oscs.setBounds(area.removeFromTop(400));
     
     auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(200);
     algorithmLabel.setBounds(algorithmArea.removeFromLeft(90));

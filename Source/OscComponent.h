@@ -12,9 +12,6 @@
 
 #include <JuceHeader.h>
 
-//==============================================================================
-/*
-*/
 class OscComponent  : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -22,7 +19,6 @@ public:
     OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
     ~OscComponent() override;
 
-    void paint (juce::Graphics&) override;
     void resized() override;
     
 private:
@@ -39,4 +35,24 @@ private:
         releaseAttachment, coarseOscAttachment, volumeAttachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
+};
+
+class OscComponents : public juce::Component
+{
+public:
+    OscComponents(juce::AudioProcessorValueTreeState &parameters)
+    : osc1(parameters, 1), osc2(parameters, 2), osc3(parameters, 3), osc4(parameters, 4)
+    {
+        addAndMakeVisible(osc1);
+        addAndMakeVisible(osc2);
+        addAndMakeVisible(osc3);
+        addAndMakeVisible(osc4);
+    }
+
+    void resized() override;
+private:
+    OscComponent osc1;
+    OscComponent osc2;
+    OscComponent osc3;
+    OscComponent osc4;
 };
