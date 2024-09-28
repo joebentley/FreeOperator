@@ -176,7 +176,7 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
 float Voice::renderSampleForAlgorithm()
 {
     jassert(algorithm > 0);
-    jassert(algorithm < 11);
+    jassert(algorithm < 12);
     
     float sample = 0.0;
     
@@ -202,6 +202,7 @@ float Voice::renderSampleForAlgorithm()
             auto osc4Sample = osc4.processSample();
             osc4Sample *= adsrOsc4.getNextSample();
             
+            osc3.setPhaseOffset(0);
             auto osc3Sample = osc3.processSample();
             osc3Sample *= adsrOsc3.getNextSample();
             
@@ -212,6 +213,138 @@ float Voice::renderSampleForAlgorithm()
             
             sample = osc1.processSample();
             sample *= adsrOsc1.getNextSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 3: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(0);
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc2.setPhaseOffset(osc3Sample);
+            auto osc2Sample = osc2.processSample();
+            osc2Sample *= adsrOsc2.getNextSample();
+            
+            osc1.setPhaseOffset(osc2Sample + osc4Sample);
+            
+            sample = osc1.processSample();
+            sample *= adsrOsc1.getNextSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 4: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc2.setPhaseOffset(osc4Sample);
+            auto osc2Sample = osc2.processSample();
+            osc2Sample *= adsrOsc2.getNextSample();
+            
+            osc1.setPhaseOffset(osc3Sample + osc2Sample);
+            
+            sample = osc1.processSample();
+            sample *= adsrOsc1.getNextSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 5: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc1.setPhaseOffset(osc3Sample);
+            osc2.setPhaseOffset(osc3Sample);
+            
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc2.getNextSample() * osc2.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 6: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc2.setPhaseOffset(osc3Sample);
+            osc1.setPhaseOffset(0);
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc2.getNextSample() * osc2.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 7: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(0);
+            auto osc3Sample = osc3.processSample();
+            osc3Sample *= adsrOsc3.getNextSample();
+            
+            osc2.setPhaseOffset(0);
+            auto osc2Sample = osc2.processSample();
+            osc2Sample *= adsrOsc2.getNextSample();
+            
+            osc1.setPhaseOffset(osc2Sample + osc3Sample + osc4Sample);
+            sample = adsrOsc1.getNextSample() * osc1.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 8: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            
+            osc2.setPhaseOffset(0);
+            auto osc2Sample = osc2.processSample();
+            osc2Sample *= adsrOsc2.getNextSample();
+            
+            osc1.setPhaseOffset(osc2Sample);
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc3.getNextSample() * osc3.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 9: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            osc2.setPhaseOffset(osc4Sample);
+            osc1.setPhaseOffset(osc4Sample);
+            
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc2.getNextSample() * osc2.processSample() + adsrOsc3.getNextSample() * osc3.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 10: {
+            auto osc4Sample = osc4.processSample();
+            osc4Sample *= adsrOsc4.getNextSample();
+            
+            osc3.setPhaseOffset(osc4Sample);
+            osc2.setPhaseOffset(0);
+            osc1.setPhaseOffset(0);
+            
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc2.getNextSample() * osc2.processSample() + adsrOsc3.getNextSample() * osc3.processSample();
+            sample *= noteVelocity * masterGain;
+            break;
+        }
+        case 11: {
+            osc3.setPhaseOffset(0);
+            osc2.setPhaseOffset(0);
+            osc1.setPhaseOffset(0);
+            
+            sample = adsrOsc1.getNextSample() * osc1.processSample() + adsrOsc2.getNextSample() * osc2.processSample() + adsrOsc3.getNextSample() * osc3.processSample() + adsrOsc4.getNextSample() * osc4.processSample();
             sample *= noteVelocity * masterGain;
             break;
         }
