@@ -55,6 +55,23 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     osc3Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3Coarse"));
     osc4Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4Coarse"));
     
+    osc1CoarseRandomMin = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1CoarseRandomMin"));;
+    osc1CoarseRandomMax = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1CoarseRandomMax"));;
+    osc1LevelRandomMin = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1LevelRandomMin"));
+    osc1LevelRandomMax = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1LevelRandomMax"));
+    osc2CoarseRandomMin = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2CoarseRandomMin"));;
+    osc2CoarseRandomMax = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2CoarseRandomMax"));;
+    osc2LevelRandomMin = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandomMin"));
+    osc2LevelRandomMax = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandomMax"));
+    osc3CoarseRandomMin = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3CoarseRandomMin"));;
+    osc3CoarseRandomMax = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3CoarseRandomMax"));;
+    osc3LevelRandomMin = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandomMin"));
+    osc3LevelRandomMax = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandomMax"));
+    osc4CoarseRandomMin = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4CoarseRandomMin"));;
+    osc4CoarseRandomMax = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4CoarseRandomMax"));;
+    osc4LevelRandomMin = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4LevelRandomMin"));
+    osc4LevelRandomMax = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4LevelRandomMax"));
+    
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
 }
@@ -79,10 +96,34 @@ void Voice::noteStarted()
     auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
-    osc1.setFrequency(osc1Coarse->get() * freqHz);
-    osc2.setFrequency(osc2Coarse->get() * freqHz);
-    osc3.setFrequency(osc3Coarse->get() * freqHz);
-    osc4.setFrequency(osc4Coarse->get() * freqHz);
+    auto coarseRange = juce::Range<int>(osc1CoarseRandomMin->get(), osc1CoarseRandomMax->get());
+    if (coarseRange.getLength() > 0)
+        osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+    else
+        osc1.setFrequency(osc1Coarse->get() * freqHz);
+    
+    coarseRange = juce::Range<int>(osc2CoarseRandomMin->get(), osc2CoarseRandomMax->get());
+    if (coarseRange.getLength() > 0)
+        osc2.setFrequency((osc2Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+    else
+        osc2.setFrequency(osc2Coarse->get() * freqHz);
+    
+    coarseRange = juce::Range<int>(osc3CoarseRandomMin->get(), osc3CoarseRandomMax->get());
+    if (coarseRange.getLength() > 0)
+        osc3.setFrequency((osc3Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+    else
+        osc3.setFrequency(osc3Coarse->get() * freqHz);
+    
+    coarseRange = juce::Range<int>(osc4CoarseRandomMin->get(), osc4CoarseRandomMax->get());
+    if (coarseRange.getLength() > 0)
+        osc4.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+    else
+        osc4.setFrequency(osc1Coarse->get() * freqHz);
+    
+    osc1.setAmplitudeOffset(random.nextFloat() * (osc1LevelRandomMax->get() - osc1LevelRandomMin->get()) + osc1LevelRandomMin->get());
+    osc2.setAmplitudeOffset(random.nextFloat() * (osc2LevelRandomMax->get() - osc2LevelRandomMin->get()) + osc2LevelRandomMin->get());
+    osc3.setAmplitudeOffset(random.nextFloat() * (osc3LevelRandomMax->get() - osc3LevelRandomMin->get()) + osc3LevelRandomMin->get());
+    osc4.setAmplitudeOffset(random.nextFloat() * (osc4LevelRandomMax->get() - osc4LevelRandomMin->get()) + osc4LevelRandomMin->get());
     
     noteVelocity = velocity;
     

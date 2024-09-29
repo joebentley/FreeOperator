@@ -20,6 +20,7 @@ public:
     void setFrequency(float frequency) { this->frequency = frequency; }
     void setPhaseOffset(float phaseOffset);
     void setAmplitude(float amplitude) { this->amplitude = amplitude; }
+    void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
     
     float processSample();
     
@@ -30,6 +31,7 @@ private:
     float frequency = 440.0;
     float sampleRate = 0.0;
     float amplitude = 1.0;
+    float amplitudeOffset = 0.0;
     
     float lastPhaseOffset = 0.0f;
     

@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "OscComponent.h"
+#include "ModulatorComponent.h"
 
 //==============================================================================
 /**
@@ -36,7 +37,9 @@ private:
     juce::MidiKeyboardState midiKeyboardState;
     juce::MidiKeyboardComponent midiKeyboardComponent { midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 
+    juce::TabbedComponent tabs { juce::TabbedButtonBar::Orientation::TabsAtTop };
     OscComponents oscs;
+    ModulatorComponents mods;
     
     juce::Slider algorithm;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;

@@ -50,6 +50,6 @@ float Oscillator::processSample()
     auto progressThrough = tempPhase * 1024.0 - std::floor(tempPhase * 1024.0);
     auto sample = lookupTable[lowerIndex] + progressThrough * (lookupTable[upperIndex] - lookupTable[lowerIndex]);
     
-    return amplitude * sample;
+    return juce::jmin(1.0f, amplitudeOffset + amplitude) * sample;
 }
 

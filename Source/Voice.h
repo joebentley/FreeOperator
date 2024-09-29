@@ -51,6 +51,23 @@ private:
     juce::AudioParameterInt *osc3Coarse;
     juce::AudioParameterInt *osc4Coarse;
     
+    juce::AudioParameterInt *osc1CoarseRandomMin;
+    juce::AudioParameterInt *osc1CoarseRandomMax;
+    juce::AudioParameterFloat *osc1LevelRandomMin;
+    juce::AudioParameterFloat *osc1LevelRandomMax;
+    juce::AudioParameterInt *osc2CoarseRandomMin;
+    juce::AudioParameterInt *osc2CoarseRandomMax;
+    juce::AudioParameterFloat *osc2LevelRandomMin;
+    juce::AudioParameterFloat *osc2LevelRandomMax;
+    juce::AudioParameterInt *osc3CoarseRandomMin;
+    juce::AudioParameterInt *osc3CoarseRandomMax;
+    juce::AudioParameterFloat *osc3LevelRandomMin;
+    juce::AudioParameterFloat *osc3LevelRandomMax;
+    juce::AudioParameterInt *osc4CoarseRandomMin;
+    juce::AudioParameterInt *osc4CoarseRandomMax;
+    juce::AudioParameterFloat *osc4LevelRandomMin;
+    juce::AudioParameterFloat *osc4LevelRandomMax;
+    
     juce::ADSR adsrOsc1;
     juce::ADSR adsrOsc2;
     juce::ADSR adsrOsc3;
@@ -61,4 +78,6 @@ private:
     juce::ADSR::Parameters adsrParameters4;
     
     juce::AudioProcessorValueTreeState &parameters;
+    
+    juce::Random random;
 };

@@ -11,15 +11,19 @@
 
 //==============================================================================
 FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), audioProcessor (p), oscs(vts), parameters(vts)
+: AudioProcessorEditor (&p), audioProcessor (p), oscs(vts), mods(vts), parameters(vts)
 {
     addAndMakeVisible(midiKeyboardComponent);
     midiKeyboardComponent.setMidiChannel(2);
     
-    addAndMakeVisible(oscs);
+    addAndMakeVisible(tabs);
+    auto backgroundColour = getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId);
+    tabs.addTab("Oscillators", backgroundColour, &oscs, false);
+    tabs.addTab("Modulators", backgroundColour, &mods, false);
+//    addAndMakeVisible(oscs);
     
     int width = 550;
-    int height = 500;
+    int height = 580;
     if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
         height += 80;
     setSize (width, height);
@@ -57,7 +61,7 @@ void FMsynthAudioProcessorEditor::resized()
     if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
         midiKeyboardComponent.setBounds(area.removeFromTop(80));
     
-    oscs.setBounds(area.removeFromTop(400));
+    tabs.setBounds(area.removeFromTop(480).reduced(5));
     
     auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(200);
     algorithmLabel.setBounds(algorithmArea.removeFromLeft(90));
