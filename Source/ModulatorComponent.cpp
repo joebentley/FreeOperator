@@ -16,23 +16,15 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     
-    addAndMakeVisible(coarseRandomMin);
-    addAndMakeVisible(coarseRandomMax);
-    addAndMakeVisible(levelRandomMin);
-    addAndMakeVisible(levelRandomMax);
-    coarseRandomMin.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    coarseRandomMin.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    coarseRandomMax.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    coarseRandomMax.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    levelRandomMin.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    levelRandomMin.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    levelRandomMax.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    levelRandomMax.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    addAndMakeVisible(coarseRandom);
+    addAndMakeVisible(levelRandom);
+    coarseRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    coarseRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    levelRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    levelRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     
-    coarseRandomMinAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandomMin", coarseRandomMin);
-    coarseRandomMaxAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandomMax", coarseRandomMax);
-    levelRandomMinAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandomMin", levelRandomMin);
-    levelRandomMaxAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandomMax", levelRandomMax);
+    coarseRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandom", coarseRandom);
+    levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
 }
 
 ModulatorComponent::~ModulatorComponent()
@@ -42,10 +34,8 @@ ModulatorComponent::~ModulatorComponent()
 void ModulatorComponent::resized()
 {
     auto area = getLocalBounds();
-    coarseRandomMin.setBounds(area.removeFromLeft(rotaryWidth));
-    coarseRandomMax.setBounds(area.removeFromLeft(rotaryWidth));
-    levelRandomMin.setBounds(area.removeFromLeft(rotaryWidth));
-    levelRandomMax.setBounds(area.removeFromLeft(rotaryWidth));
+    coarseRandom.setBounds(area.removeFromLeft(rotaryWidth));
+    levelRandom.setBounds(area.removeFromLeft(rotaryWidth));
 }
 
 void ModulatorComponents::resized()
