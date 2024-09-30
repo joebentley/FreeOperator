@@ -80,6 +80,12 @@ void Voice::prepare(const juce::dsp::ProcessSpec& spec)
     osc3.setSampleRate((float)spec.sampleRate);
     osc4.setSampleRate((float)spec.sampleRate);
     
+    auto filterCoefficients = juce::dsp::FilterDesign<float>::designFIRLowpassKaiserMethod(5000, spec.sampleRate, 0.25, -60.0);
+    osc1.setFilterCoefficients(filterCoefficients);
+    osc2.setFilterCoefficients(filterCoefficients);
+    osc3.setFilterCoefficients(filterCoefficients);
+    osc4.setFilterCoefficients(filterCoefficients);
+    
     tempBuffer.setSize(spec.numChannels, spec.maximumBlockSize);
 }
 

@@ -21,6 +21,7 @@ public:
     void setPhaseOffset(float phaseOffset);
     void setAmplitude(float amplitude) { this->amplitude = amplitude; }
     void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
+    void setFilterCoefficients(juce::dsp::FIR::Coefficients<float>::Ptr coefficientsPtr) { filter.coefficients = coefficientsPtr; }
     
     float processSample();
     
@@ -33,7 +34,7 @@ private:
     float amplitude = 1.0;
     float amplitudeOffset = 0.0;
     
-    float lastPhaseOffset = 0.0f;
+    juce::dsp::FIR::Filter<float> filter;
     
     JUCE_DECLARE_NON_COPYABLE(Oscillator)
 };

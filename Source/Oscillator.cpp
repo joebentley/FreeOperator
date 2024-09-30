@@ -21,10 +21,12 @@ Oscillator::Oscillator()
 
 void Oscillator::setPhaseOffset(float phaseOffset)
 {
-    // simple lpf (not sure if this is doing anything)
-    auto thisPhaseOffset = this->phaseOffset;
-    this->phaseOffset = 0.5f * (phaseOffset + lastPhaseOffset);
-    lastPhaseOffset = thisPhaseOffset;
+    // simple lpf
+    if (filter.coefficients != nullptr) {
+        this->phaseOffset = filter.processSample(phaseOffset);
+    } else {
+        this->phaseOffset = phaseOffset;
+    }
 }
 
 float Oscillator::processSample()
