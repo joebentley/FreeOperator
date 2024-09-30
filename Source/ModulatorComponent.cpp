@@ -12,7 +12,7 @@
 #include "ModulatorComponent.h"
 
 //==============================================================================
-ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber)
+ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber)
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     
@@ -25,6 +25,19 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     
     coarseRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandom", coarseRandom);
     levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
+    
+    addAndMakeVisible(oscNumLabel);
+    oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
+    oscNumLabel.setFont(juce::FontOptions(20));
+    
+    if (oscNumber == 4) {
+        addAndMakeVisible(coarseRandomLabel);
+        addAndMakeVisible(levelRandomLabel);
+        coarseRandomLabel.setText("Rand. Coarse", juce::dontSendNotification);
+        coarseRandomLabel.setJustificationType(juce::Justification::centredBottom);
+        levelRandomLabel.setText("Rand. Level", juce::dontSendNotification);
+        levelRandomLabel.setJustificationType(juce::Justification::centredBottom);
+    }
 }
 
 ModulatorComponent::~ModulatorComponent()
@@ -34,6 +47,15 @@ ModulatorComponent::~ModulatorComponent()
 void ModulatorComponent::resized()
 {
     auto area = getLocalBounds();
+    
+    if (oscNumber == 4) {
+        auto labelArea = area.removeFromTop(40);
+        labelArea.removeFromLeft(50);
+        coarseRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+        levelRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+    }
+    
+    oscNumLabel.setBounds(area.removeFromLeft(50).withTrimmedLeft(18).withTrimmedBottom(30));
     coarseRandom.setBounds(area.removeFromLeft(rotaryWidth));
     levelRandom.setBounds(area.removeFromLeft(rotaryWidth));
 }

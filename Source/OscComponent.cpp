@@ -46,7 +46,6 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
     
     addAndMakeVisible(oscNumLabel);
     oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
-//    oscNumLabel.setJustificationType(juce::Justification::centred);
     oscNumLabel.setFont(juce::FontOptions(20));
     
     if (oscNumber == 4) {

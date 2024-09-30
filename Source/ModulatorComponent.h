@@ -29,7 +29,10 @@ private:
     static constexpr int rotaryBoxHeight = 20;
     static constexpr int rotaryWidth = 80;
     
+    int oscNumber;
+    
     juce::Slider coarseRandom, levelRandom;
+    juce::Label coarseRandomLabel, levelRandomLabel, oscNumLabel;
     std::unique_ptr<SliderAttachment> coarseRandomAttachment, levelRandomAttachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorComponent)
