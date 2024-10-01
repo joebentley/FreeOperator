@@ -16,12 +16,13 @@ class Oscillator
 public:
     Oscillator();
     
+    void reset() { filter.reset(); }
     void setSampleRate(float sampleRate) { this->sampleRate = sampleRate; }
     void setFrequency(float frequency) { this->frequency = frequency; }
     void setPhaseOffset(float phaseOffset);
     void setAmplitude(float amplitude) { this->amplitude = amplitude; }
     void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
-    void setFilterCoefficients(juce::dsp::FIR::Coefficients<float>::Ptr coefficientsPtr) { filter.coefficients = coefficientsPtr; }
+    void setFilterCoefficients(const juce::IIRCoefficients &newCoefficients) { filter.setCoefficients(newCoefficients); }
     
     float processSample();
     
@@ -34,7 +35,7 @@ private:
     float amplitude = 1.0;
     float amplitudeOffset = 0.0;
     
-    juce::dsp::FIR::Filter<float> filter;
+    juce::IIRFilter filter;
     
     JUCE_DECLARE_NON_COPYABLE(Oscillator)
 };

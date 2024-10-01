@@ -72,4 +72,6 @@ private:
     juce::AudioProcessorValueTreeState &parameters;
     
     juce::Random random;
+    
+    double sampleRate;
 };

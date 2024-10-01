@@ -45,6 +45,10 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;
     juce::Label algorithmLabel;
     
+    juce::Slider tone;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneAttachment;
+    juce::Label toneLabel;
+    
     juce::AudioProcessorValueTreeState &parameters;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FMsynthAudioProcessorEditor)

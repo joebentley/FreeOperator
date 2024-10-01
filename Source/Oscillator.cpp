@@ -22,11 +22,7 @@ Oscillator::Oscillator()
 void Oscillator::setPhaseOffset(float phaseOffset)
 {
     // simple lpf
-    if (filter.coefficients != nullptr) {
-        this->phaseOffset = filter.processSample(phaseOffset);
-    } else {
-        this->phaseOffset = phaseOffset;
-    }
+    this->phaseOffset = filter.processSingleSampleRaw(phaseOffset);    
 }
 
 float Oscillator::processSample()

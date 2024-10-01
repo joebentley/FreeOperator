@@ -62,6 +62,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc4LevelRandom", 1), "Osc 4 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
     std::make_unique<juce::AudioParameterInt>(  pid("algorithm", 1),    "Algorithm",        1, 11, 1),
+    std::make_unique<juce::AudioParameterFloat>(pid("tone", 1),    "Tone",        nrf(0.0f, 20000.0f, 0.01f, 0.27f), 1000.0f)
 }),
 audioEngine(parameters)
 #endif

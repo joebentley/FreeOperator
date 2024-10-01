@@ -37,6 +37,14 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     
     addAndMakeVisible(algorithmLabel);
     algorithmLabel.setText("Algorithm", juce::dontSendNotification);
+    
+    addAndMakeVisible(tone);
+    tone.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    tone.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    toneAttachment = std::make_unique<SliderAttachment>(parameters, "tone", tone);
+    
+    addAndMakeVisible(toneLabel);
+    toneLabel.setText("Tone", juce::dontSendNotification);
 }
 
 FMsynthAudioProcessorEditor::~FMsynthAudioProcessorEditor()
@@ -63,7 +71,10 @@ void FMsynthAudioProcessorEditor::resized()
     
     tabs.setBounds(area.removeFromTop(480).reduced(5));
     
-    auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(200);
+    auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(150);
     algorithmLabel.setBounds(algorithmArea.removeFromLeft(90));
     algorithm.setBounds(algorithmArea.removeFromLeft(90));
+    
+    toneLabel.setBounds(algorithmArea.removeFromLeft(90));
+    tone.setBounds(algorithmArea.removeFromLeft(90));
 }

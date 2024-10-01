@@ -45,6 +45,7 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     parameters.addParameterListener("osc4Decay", this);
     parameters.addParameterListener("osc4Sustain", this);
     parameters.addParameterListener("osc4Release", this);
+    parameters.addParameterListener("tone", this);
     
     osc1Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1Volume"));
     osc2Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2Volume"));
@@ -80,13 +81,20 @@ void Voice::prepare(const juce::dsp::ProcessSpec& spec)
     osc3.setSampleRate((float)spec.sampleRate);
     osc4.setSampleRate((float)spec.sampleRate);
     
-    auto filterCoefficients = juce::dsp::FilterDesign<float>::designFIRLowpassKaiserMethod(5000, spec.sampleRate, 0.25, -60.0);
+    auto filterCoefficients = juce::IIRCoefficients::makeLowPass(spec.sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
     osc1.setFilterCoefficients(filterCoefficients);
     osc2.setFilterCoefficients(filterCoefficients);
     osc3.setFilterCoefficients(filterCoefficients);
     osc4.setFilterCoefficients(filterCoefficients);
     
+    osc1.reset();
+    osc2.reset();
+    osc3.reset();
+    osc4.reset();
+    
     tempBuffer.setSize(spec.numChannels, spec.maximumBlockSize);
+    
+    sampleRate = spec.sampleRate;
 }
 
 void Voice::noteStarted()
@@ -179,6 +187,13 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
         adsrParameters4.release = newValue;
     else if (parameterID == "algorithm")
         algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
+    else if (parameterID == "tone") {
+        auto filterCoefficients = juce::IIRCoefficients::makeLowPass(sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
+        osc1.setFilterCoefficients(filterCoefficients);
+        osc2.setFilterCoefficients(filterCoefficients);
+        osc3.setFilterCoefficients(filterCoefficients);
+        osc4.setFilterCoefficients(filterCoefficients);
+    }
 }
 
 void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
