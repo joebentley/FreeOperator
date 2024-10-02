@@ -18,7 +18,8 @@ using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
-
+    ~OscComponent() override;
+    
     void resized() override;
     
 private:
@@ -39,6 +40,7 @@ private:
     std::unique_ptr<ButtonAttachment> fixedAttachment;
     
     juce::AudioParameterBool* fixedParameter;
+    juce::AudioProcessorValueTreeState &parameters;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };

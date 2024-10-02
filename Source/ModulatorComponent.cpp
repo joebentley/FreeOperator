@@ -12,7 +12,7 @@
 #include "ModulatorComponent.h"
 
 //==============================================================================
-ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber)
+ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber), parameters(parameters)
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     
@@ -49,6 +49,12 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
         levelRandomLabel.setText("Rand. Level", juce::dontSendNotification);
         levelRandomLabel.setJustificationType(juce::Justification::centredBottom);
     }
+}
+
+ModulatorComponent::~ModulatorComponent()
+{
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    parameters.removeParameterListener(parameterPrefix + "Fixed", this);
 }
 
 void ModulatorComponent::parameterChanged (const juce::String& parameterID, float newValue)

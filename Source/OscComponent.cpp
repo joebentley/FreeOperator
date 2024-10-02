@@ -12,7 +12,7 @@
 #include "OscComponent.h"
 
 //==============================================================================
-OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber)
+OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber), parameters(parameters)
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     
@@ -90,6 +90,12 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
         volumeLabel.setText("Level", juce::dontSendNotification);
         volumeLabel.setJustificationType(juce::Justification::centredBottom);
     }
+}
+
+OscComponent::~OscComponent()
+{
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    parameters.removeParameterListener(parameterPrefix + "Fixed", this);
 }
 
 void OscComponent::resized()

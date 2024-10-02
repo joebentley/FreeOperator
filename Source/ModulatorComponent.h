@@ -20,6 +20,7 @@ class ModulatorComponent  : public juce::Component, public juce::AudioProcessorV
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 public:
     ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
+    ~ModulatorComponent() override;
 
     void resized() override;
 
@@ -37,6 +38,7 @@ private:
     std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment;
     
     juce::AudioParameterBool* fixedParameter;
+    juce::AudioProcessorValueTreeState &parameters;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorComponent)
 };
