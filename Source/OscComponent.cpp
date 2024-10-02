@@ -34,10 +34,15 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
     sustainAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Sustain", sustain);
     releaseAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Release", release);
     
-    addAndMakeVisible(coarseOsc);
-    coarseOsc.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    coarseOsc.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    coarseOscAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Coarse", coarseOsc);
+    addAndMakeVisible(coarse);
+    coarse.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    coarse.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    coarseAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Coarse", coarse);
+    
+    addAndMakeVisible(fine);
+    fine.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    fine.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    fineAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Fine", fine);
     
     addAndMakeVisible(volume);
     volume.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -62,9 +67,13 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
         releaseLabel.setText("Release", juce::dontSendNotification);
         releaseLabel.setJustificationType(juce::Justification::centredBottom);
         
-        addAndMakeVisible(coarseOscLabel);
-        coarseOscLabel.setText("Coarse", juce::dontSendNotification);
-        coarseOscLabel.setJustificationType(juce::Justification::centredBottom);
+        addAndMakeVisible(coarseLabel);
+        coarseLabel.setText("Coarse", juce::dontSendNotification);
+        coarseLabel.setJustificationType(juce::Justification::centredBottom);
+        
+        addAndMakeVisible(fineLabel);
+        fineLabel.setText("Fine", juce::dontSendNotification);
+        fineLabel.setJustificationType(juce::Justification::centredBottom);
         
         addAndMakeVisible(volumeLabel);
         volumeLabel.setText("Level", juce::dontSendNotification);
@@ -87,7 +96,8 @@ void OscComponent::resized()
         decayLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         sustainLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         releaseLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
-        coarseOscLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+        coarseLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+        fineLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         volumeLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
     }
     
@@ -96,7 +106,8 @@ void OscComponent::resized()
     decay.setBounds(area.removeFromLeft(rotaryWidth));
     sustain.setBounds(area.removeFromLeft(rotaryWidth));
     release.setBounds(area.removeFromLeft(rotaryWidth));
-    coarseOsc.setBounds(area.removeFromLeft(rotaryWidth));
+    coarse.setBounds(area.removeFromLeft(rotaryWidth));
+    fine.setBounds(area.removeFromLeft(rotaryWidth));
     volume.setBounds(area.removeFromLeft(rotaryWidth));
 }
 

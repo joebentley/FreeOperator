@@ -28,11 +28,11 @@ private:
     
     int oscNumber;
     
-    juce::Slider attack, decay, sustain, release, coarseOsc, volume;
-    juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseOscLabel, volumeLabel;
+    juce::Slider attack, decay, sustain, release, coarse, fine, volume;
+    juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseLabel, fineLabel, volumeLabel;
     
     std::unique_ptr<SliderAttachment> attackAttachment, decayAttachment, sustainAttachment,
-        releaseAttachment, coarseOscAttachment, volumeAttachment;
+        releaseAttachment, coarseAttachment, fineAttachment, volumeAttachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };

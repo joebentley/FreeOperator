@@ -22,7 +22,7 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     tabs.addTab("Modulators", backgroundColour, &mods, false);
 //    addAndMakeVisible(oscs);
     
-    int width = 550;
+    int width = 630;
     int height = 580;
     if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
         height += 80;
