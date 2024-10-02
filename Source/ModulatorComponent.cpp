@@ -17,13 +17,17 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     
     addAndMakeVisible(coarseRandom);
+    addAndMakeVisible(fineRandom);
     addAndMakeVisible(levelRandom);
     coarseRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     coarseRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    fineRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    fineRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     levelRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     levelRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     
     coarseRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandom", coarseRandom);
+    fineRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "FineRandom", fineRandom);
     levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
     
     addAndMakeVisible(oscNumLabel);
@@ -32,9 +36,12 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     
     if (oscNumber == 4) {
         addAndMakeVisible(coarseRandomLabel);
+        addAndMakeVisible(fineRandomLabel);
         addAndMakeVisible(levelRandomLabel);
         coarseRandomLabel.setText("Rand. Coarse", juce::dontSendNotification);
         coarseRandomLabel.setJustificationType(juce::Justification::centredBottom);
+        fineRandomLabel.setText("Rand. Fine", juce::dontSendNotification);
+        fineRandomLabel.setJustificationType(juce::Justification::centredBottom);
         levelRandomLabel.setText("Rand. Level", juce::dontSendNotification);
         levelRandomLabel.setJustificationType(juce::Justification::centredBottom);
     }
@@ -52,11 +59,13 @@ void ModulatorComponent::resized()
         auto labelArea = area.removeFromTop(40);
         labelArea.removeFromLeft(50);
         coarseRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+        fineRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         levelRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
     }
     
     oscNumLabel.setBounds(area.removeFromLeft(50).withTrimmedLeft(18).withTrimmedBottom(30));
     coarseRandom.setBounds(area.removeFromLeft(rotaryWidth));
+    fineRandom.setBounds(area.removeFromLeft(rotaryWidth));
     levelRandom.setBounds(area.removeFromLeft(rotaryWidth));
 }
 

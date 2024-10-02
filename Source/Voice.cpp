@@ -61,12 +61,16 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     osc4Fine = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4Fine"));
     
     osc1CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1CoarseRandom"));
-    osc1LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1LevelRandom"));
     osc2CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2CoarseRandom"));
-    osc2LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandom"));
     osc3CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3CoarseRandom"));
-    osc3LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandom"));
     osc4CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4CoarseRandom"));
+    osc1FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1FineRandom"));
+    osc2FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2FineRandom"));
+    osc3FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3FineRandom"));
+    osc4FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4FineRandom"));
+    osc1LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1LevelRandom"));
+    osc2LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandom"));
+    osc3LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandom"));
     osc4LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4LevelRandom"));
     
     parameters.addParameterListener("algorithm", this);
@@ -108,27 +112,48 @@ void Voice::noteStarted()
     
     auto coarseRange = osc1CoarseRandom->get();
     if (coarseRange > 0)
-        osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz + osc1Fine->get());
+        osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
     else
         osc1.setFrequency(osc1Coarse->get() * freqHz + osc1Fine->get());
     
     coarseRange = osc2CoarseRandom->get();
     if (coarseRange > 0)
-        osc2.setFrequency((osc2Coarse->get() + random.nextInt(coarseRange)) * freqHz + osc2Fine->get());
+        osc2.setFrequency((osc2Coarse->get() + random.nextInt(coarseRange)) * freqHz);
     else
         osc2.setFrequency(osc2Coarse->get() * freqHz + osc2Fine->get());
     
     coarseRange = osc3CoarseRandom->get();
     if (coarseRange > 0)
-        osc3.setFrequency((osc3Coarse->get() + random.nextInt(coarseRange)) * freqHz + osc3Fine->get());
+        osc3.setFrequency((osc3Coarse->get() + random.nextInt(coarseRange)) * freqHz);
     else
         osc3.setFrequency(osc3Coarse->get() * freqHz + osc3Fine->get());
     
     coarseRange = osc4CoarseRandom->get();
     if (coarseRange > 0)
-        osc4.setFrequency((osc4Coarse->get() + random.nextInt(coarseRange)) * freqHz + osc4Fine->get());
+        osc4.setFrequency((osc4Coarse->get() + random.nextInt(coarseRange)) * freqHz);
     else
         osc4.setFrequency(osc4Coarse->get() * freqHz + osc4Fine->get());
+    
+    osc1.setFrequency(osc1.getFrequency() + osc1Fine->get());
+    osc2.setFrequency(osc2.getFrequency() + osc2Fine->get());
+    osc3.setFrequency(osc3.getFrequency() + osc3Fine->get());
+    osc4.setFrequency(osc4.getFrequency() + osc4Fine->get());
+    
+    auto fineRange = osc1FineRandom->get();
+    if (fineRange > 0.00001)
+        osc1.setFrequency(osc1.getFrequency() + random.nextFloat() * fineRange);
+    
+    fineRange = osc2FineRandom->get();
+    if (fineRange > 0.00001)
+        osc2.setFrequency(osc2.getFrequency() + random.nextFloat() * fineRange);
+    
+    fineRange = osc3FineRandom->get();
+    if (fineRange > 0.00001)
+        osc3.setFrequency(osc3.getFrequency() + random.nextFloat() * fineRange);
+    
+    fineRange = osc4FineRandom->get();
+    if (fineRange > 0.00001)
+        osc4.setFrequency(osc4.getFrequency() + random.nextFloat() * fineRange);
     
     osc1.setAmplitudeOffset(random.nextFloat() * osc1LevelRandom->get());
     osc2.setAmplitudeOffset(random.nextFloat() * osc2LevelRandom->get());

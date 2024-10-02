@@ -31,9 +31,9 @@ private:
     
     int oscNumber;
     
-    juce::Slider coarseRandom, levelRandom;
-    juce::Label coarseRandomLabel, levelRandomLabel, oscNumLabel;
-    std::unique_ptr<SliderAttachment> coarseRandomAttachment, levelRandomAttachment;
+    juce::Slider coarseRandom, fineRandom, levelRandom;
+    juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, oscNumLabel;
+    std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorComponent)
 };

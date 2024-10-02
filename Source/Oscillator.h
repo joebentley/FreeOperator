@@ -24,6 +24,8 @@ public:
     void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
     void setFilterCoefficients(const juce::IIRCoefficients &newCoefficients) { filter.setCoefficients(newCoefficients); }
     
+    float getFrequency() { return frequency; }
+    
     float processSample();
     
 private:
