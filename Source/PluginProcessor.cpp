@@ -34,6 +34,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc1Volume", 1),   "Osc 1 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 1.0f),
     std::make_unique<juce::AudioParameterInt>(pid("osc1CoarseRandom", 1), "Osc 1 Coarse Random", 0, 30, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1FineRandom", 1), "Osc 1 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
+    std::make_unique<juce::AudioParameterBool>(pid("osc1Fixed", 1),     "Osc 1 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1LevelRandom", 1), "Osc 1 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
     std::make_unique<juce::AudioParameterFloat>(pid("osc2Attack", 1),   "Osc 2 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.01f),
@@ -45,6 +46,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc2Volume", 1),   "Osc 2 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterInt>(pid("osc2CoarseRandom", 1), "Osc 2 Coarse Random", 0, 30, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("osc2FineRandom", 1), "Osc 2 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
+    std::make_unique<juce::AudioParameterBool>(pid("osc2Fixed", 1),     "Osc 2 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc2LevelRandom", 1), "Osc 2 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
     std::make_unique<juce::AudioParameterFloat>(pid("osc3Attack", 1),   "Osc 3 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.01f),
@@ -56,6 +58,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc3Volume", 1),   "Osc 3 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterInt>(pid("osc3CoarseRandom", 1), "Osc 3 Coarse Random", 0, 30, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("osc3FineRandom", 1), "Osc 3 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
+    std::make_unique<juce::AudioParameterBool>(pid("osc3Fixed", 1),     "Osc 3 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc3LevelRandom", 1), "Osc 3 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
     std::make_unique<juce::AudioParameterFloat>(pid("osc4Attack", 1),   "Osc 4 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.01f),
@@ -67,6 +70,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc4Volume", 1),   "Osc 4 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterInt>(pid("osc4CoarseRandom", 1), "Osc 4 Coarse Random", 0, 30, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("osc4FineRandom", 1), "Osc 4 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
+    std::make_unique<juce::AudioParameterBool>(pid("osc4Fixed", 1),     "Osc 4 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc4LevelRandom", 1), "Osc 4 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
     std::make_unique<juce::AudioParameterInt>(  pid("algorithm", 1),    "Algorithm",        1, 11, 1),

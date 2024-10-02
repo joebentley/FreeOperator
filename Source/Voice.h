@@ -54,6 +54,10 @@ private:
     juce::AudioParameterFloat *osc2Fine;
     juce::AudioParameterFloat *osc3Fine;
     juce::AudioParameterFloat *osc4Fine;
+    juce::AudioParameterBool *osc1Fixed;
+    juce::AudioParameterBool *osc2Fixed;
+    juce::AudioParameterBool *osc3Fixed;
+    juce::AudioParameterBool *osc4Fixed;
     
     juce::AudioParameterInt     *osc1CoarseRandom;
     juce::AudioParameterInt     *osc2CoarseRandom;

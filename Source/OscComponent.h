@@ -12,16 +12,18 @@
 
 #include <JuceHeader.h>
 
-class OscComponent  : public juce::Component
+class OscComponent  : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
-    ~OscComponent() override;
 
     void resized() override;
     
 private:
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    
     static constexpr int rotaryBoxWidth = 70;
     static constexpr int rotaryBoxHeight = 20;
     static constexpr int rotaryWidth = 80;
@@ -29,10 +31,14 @@ private:
     int oscNumber;
     
     juce::Slider attack, decay, sustain, release, coarse, fine, volume;
-    juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseLabel, fineLabel, volumeLabel;
+    juce::ToggleButton fixed;
+    juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseLabel, fineLabel, fixedLabel, volumeLabel;
     
     std::unique_ptr<SliderAttachment> attackAttachment, decayAttachment, sustainAttachment,
         releaseAttachment, coarseAttachment, fineAttachment, volumeAttachment;
+    std::unique_ptr<ButtonAttachment> fixedAttachment;
+    
+    juce::AudioParameterBool* fixedParameter;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };

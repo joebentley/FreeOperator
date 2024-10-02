@@ -39,10 +39,17 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
     coarse.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     coarseAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Coarse", coarse);
     
+    fixedParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter(parameterPrefix + "Fixed"));
+    coarse.setEnabled(!fixedParameter->get());
+    parameters.addParameterListener(parameterPrefix + "Fixed", this);
+    
     addAndMakeVisible(fine);
     fine.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     fine.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     fineAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "Fine", fine);
+    
+    addAndMakeVisible(fixed);
+    fixedAttachment = std::make_unique<ButtonAttachment>(parameters, parameterPrefix + "Fixed", fixed);
     
     addAndMakeVisible(volume);
     volume.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -75,14 +82,14 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
         fineLabel.setText("Fine", juce::dontSendNotification);
         fineLabel.setJustificationType(juce::Justification::centredBottom);
         
+        addAndMakeVisible(fixedLabel);
+        fixedLabel.setText("Fixed", juce::dontSendNotification);
+        fixedLabel.setJustificationType(juce::Justification::centredBottom);
+        
         addAndMakeVisible(volumeLabel);
         volumeLabel.setText("Level", juce::dontSendNotification);
         volumeLabel.setJustificationType(juce::Justification::centredBottom);
     }
-}
-
-OscComponent::~OscComponent()
-{
 }
 
 void OscComponent::resized()
@@ -98,6 +105,7 @@ void OscComponent::resized()
         releaseLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         coarseLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         fineLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
+        fixedLabel.setBounds(labelArea.removeFromLeft(40));
         volumeLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
     }
     
@@ -108,7 +116,15 @@ void OscComponent::resized()
     release.setBounds(area.removeFromLeft(rotaryWidth));
     coarse.setBounds(area.removeFromLeft(rotaryWidth));
     fine.setBounds(area.removeFromLeft(rotaryWidth));
+    fixed.setBounds(area.removeFromLeft(40).withTrimmedLeft(8));
     volume.setBounds(area.removeFromLeft(rotaryWidth));
+}
+
+void OscComponent::parameterChanged (const juce::String& parameterID, float newValue)
+{
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    if (parameterID == parameterPrefix + "Fixed")
+        coarse.setEnabled(!fixedParameter->get());
 }
 
 void OscComponents::resized()
