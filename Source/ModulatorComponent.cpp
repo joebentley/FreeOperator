@@ -26,6 +26,10 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     levelRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     levelRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     
+    fixedParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter(parameterPrefix + "Fixed"));
+    coarseRandom.setEnabled(!fixedParameter->get());
+    parameters.addParameterListener(parameterPrefix + "Fixed", this);
+    
     coarseRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandom", coarseRandom);
     fineRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "FineRandom", fineRandom);
     levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
@@ -47,8 +51,11 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     }
 }
 
-ModulatorComponent::~ModulatorComponent()
+void ModulatorComponent::parameterChanged (const juce::String& parameterID, float newValue)
 {
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    if (parameterID == parameterPrefix + "Fixed")
+        coarseRandom.setEnabled(!fixedParameter->get());
 }
 
 void ModulatorComponent::resized()

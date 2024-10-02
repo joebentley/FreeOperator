@@ -15,16 +15,17 @@
 //==============================================================================
 /*
 */
-class ModulatorComponent  : public juce::Component
+class ModulatorComponent  : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 public:
     ModulatorComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
-    ~ModulatorComponent() override;
 
     void resized() override;
 
 private:
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    
     static constexpr int rotaryBoxWidth = 70;
     static constexpr int rotaryBoxHeight = 20;
     static constexpr int rotaryWidth = 80;
@@ -34,6 +35,8 @@ private:
     juce::Slider coarseRandom, fineRandom, levelRandom;
     juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, oscNumLabel;
     std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment;
+    
+    juce::AudioParameterBool* fixedParameter;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorComponent)
 };
