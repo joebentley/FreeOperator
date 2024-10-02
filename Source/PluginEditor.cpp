@@ -71,10 +71,10 @@ void FMsynthAudioProcessorEditor::resized()
     
     tabs.setBounds(area.removeFromTop(480).reduced(5));
     
-    auto algorithmArea = area.removeFromTop(90).withTrimmedLeft(150);
-    algorithmLabel.setBounds(algorithmArea.removeFromLeft(90));
-    algorithm.setBounds(algorithmArea.removeFromLeft(90));
+    auto bottomArea = area.removeFromTop(90).withTrimmedLeft(150);
+    algorithmLabel.setBounds(bottomArea.removeFromLeft(90));
+    algorithm.setBounds(bottomArea.removeFromLeft(90));
     
-    toneLabel.setBounds(algorithmArea.removeFromLeft(90));
-    tone.setBounds(algorithmArea.removeFromLeft(90));
+    toneLabel.setBounds(bottomArea.removeFromLeft(90).withTrimmedLeft(50));
+    tone.setBounds(bottomArea.removeFromLeft(90));
 }
