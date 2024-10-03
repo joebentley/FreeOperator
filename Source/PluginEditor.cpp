@@ -20,8 +20,7 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     auto backgroundColour = getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId);
     tabs.addTab("Oscillators", backgroundColour, &oscs, false);
     tabs.addTab("Modulators", backgroundColour, &mods, false);
-//    addAndMakeVisible(oscs);
-    
+
     int width = 660;
     int height = 580;
     if (juce::PluginHostType::getPluginLoadedAs() == juce::AudioProcessor::wrapperType_Standalone)
@@ -57,10 +56,6 @@ void FMsynthAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-//    g.setColour (juce::Colours::white);
-//    g.setFont (juce::FontOptions (15.0f));
-//    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void FMsynthAudioProcessorEditor::resized()

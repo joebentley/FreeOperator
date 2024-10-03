@@ -24,6 +24,7 @@ FMsynthAudioProcessor::FMsynthAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
+#endif
 parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc1Attack", 1),   "Osc 1 Attack",     nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.01f),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1Decay", 1),    "Osc 1 Decay",      nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.2f),
@@ -77,7 +78,6 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("tone", 1),    "Tone",        nrf(1000.0f, 10000.0f, 0.01f, 0.27f), 5000.0f)
 }),
 audioEngine(parameters)
-#endif
 {
 }
 
