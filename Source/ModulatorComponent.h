@@ -33,9 +33,9 @@ private:
     
     int oscNumber;
     
-    juce::Slider coarseRandom, fineRandom, levelRandom;
-    juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, oscNumLabel;
-    std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment;
+    juce::Slider coarseRandom, fineRandom, levelRandom, decayRandom;
+    juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, decayRandomLabel, oscNumLabel;
+    std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment, decayRandomAttachment;
     
     juce::AudioParameterBool* fixedParameter;
     juce::AudioProcessorValueTreeState &parameters;

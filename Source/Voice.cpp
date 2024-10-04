@@ -76,6 +76,10 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     osc2LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandom"));
     osc3LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandom"));
     osc4LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4LevelRandom"));
+    osc1DecayRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1DecayRandom"));
+    osc2DecayRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2DecayRandom"));
+    osc3DecayRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3DecayRandom"));
+    osc4DecayRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4DecayRandom"));
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
@@ -181,13 +185,30 @@ void Voice::noteStarted()
     
     noteVelocity = velocity;
     
-    adsrOsc1.setParameters(adsrParameters1);
+    auto adsrParameters1Copy = adsrParameters1;
+    if (osc1DecayRandom->get() > 0.000001f)
+        adsrParameters1Copy.decay += random.nextFloat() * osc1DecayRandom->get();
+    
+    auto adsrParameters2Copy = adsrParameters2;
+    if (osc2DecayRandom->get() > 0.000001f)
+        adsrParameters2Copy.decay += random.nextFloat() * osc2DecayRandom->get();
+    
+    auto adsrParameters3Copy = adsrParameters3;
+    if (osc3DecayRandom->get() > 0.000001f)
+        adsrParameters3Copy.decay += random.nextFloat() * osc3DecayRandom->get();
+    
+    auto adsrParameters4Copy = adsrParameters4;
+    if (osc4DecayRandom->get() > 0.000001f)
+        adsrParameters4Copy.decay += random.nextFloat() * osc4DecayRandom->get();
+
+    adsrOsc1.setParameters(adsrParameters1Copy);
+    adsrOsc2.setParameters(adsrParameters2Copy);
+    adsrOsc3.setParameters(adsrParameters3Copy);
+    adsrOsc4.setParameters(adsrParameters4Copy);
+    
     adsrOsc1.noteOn();
-    adsrOsc2.setParameters(adsrParameters2);
     adsrOsc2.noteOn();
-    adsrOsc3.setParameters(adsrParameters3);
     adsrOsc3.noteOn();
-    adsrOsc4.setParameters(adsrParameters4);
     adsrOsc4.noteOn();
 }
 
