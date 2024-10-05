@@ -11,7 +11,7 @@
 
 //==============================================================================
 FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-: AudioProcessorEditor (&p), audioProcessor (p), oscs(vts), mods(vts), parameters(vts)
+: AudioProcessorEditor (&p), audioProcessor (p), oscs(vts), modTab(vts), parameters(vts)
 {
     addAndMakeVisible(midiKeyboardComponent);
     midiKeyboardComponent.setMidiChannel(2);
@@ -19,7 +19,7 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     addAndMakeVisible(tabs);
     auto backgroundColour = getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId);
     tabs.addTab("Oscillators", backgroundColour, &oscs, false);
-    tabs.addTab("Modulators", backgroundColour, &mods, false);
+    tabs.addTab("Modulators", backgroundColour, &modTab, false);
 
     int width = 660;
     int height = 580;

@@ -71,10 +71,8 @@ private:
     juce::AudioParameterFloat   *osc2LevelRandom;
     juce::AudioParameterFloat   *osc3LevelRandom;
     juce::AudioParameterFloat   *osc4LevelRandom;
-    juce::AudioParameterFloat   *osc1DecayRandom;
-    juce::AudioParameterFloat   *osc2DecayRandom;
-    juce::AudioParameterFloat   *osc3DecayRandom;
-    juce::AudioParameterFloat   *osc4DecayRandom;
+    
+    juce::AudioParameterFloat   *timeRandom;
     
     juce::ADSR adsrOsc1;
     juce::ADSR adsrOsc2;

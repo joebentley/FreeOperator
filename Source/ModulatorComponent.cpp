@@ -19,15 +19,12 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     addAndMakeVisible(coarseRandom);
     addAndMakeVisible(fineRandom);
     addAndMakeVisible(levelRandom);
-    addAndMakeVisible(decayRandom);
     coarseRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     coarseRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     fineRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     fineRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     levelRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     levelRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
-    decayRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    decayRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
     
     fixedParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter(parameterPrefix + "Fixed"));
     coarseRandom.setEnabled(!fixedParameter->get());
@@ -36,7 +33,6 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     coarseRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "CoarseRandom", coarseRandom);
     fineRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "FineRandom", fineRandom);
     levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
-    decayRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "DecayRandom", decayRandom);
     
     addAndMakeVisible(oscNumLabel);
     oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
@@ -46,15 +42,12 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
         addAndMakeVisible(coarseRandomLabel);
         addAndMakeVisible(fineRandomLabel);
         addAndMakeVisible(levelRandomLabel);
-        addAndMakeVisible(decayRandomLabel);
         coarseRandomLabel.setText("Rand. Coarse", juce::dontSendNotification);
         coarseRandomLabel.setJustificationType(juce::Justification::centredBottom);
         fineRandomLabel.setText("Rand. Fine", juce::dontSendNotification);
         fineRandomLabel.setJustificationType(juce::Justification::centredBottom);
         levelRandomLabel.setText("Rand. Level", juce::dontSendNotification);
         levelRandomLabel.setJustificationType(juce::Justification::centredBottom);
-        decayRandomLabel.setText("Rand. Decay", juce::dontSendNotification);
-        decayRandomLabel.setJustificationType(juce::Justification::centredBottom);
     }
 }
 
@@ -81,14 +74,12 @@ void ModulatorComponent::resized()
         coarseRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         fineRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         levelRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
-        decayRandomLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
     }
     
     oscNumLabel.setBounds(area.removeFromLeft(50).withTrimmedLeft(18).withTrimmedBottom(30));
     coarseRandom.setBounds(area.removeFromLeft(rotaryWidth));
     fineRandom.setBounds(area.removeFromLeft(rotaryWidth));
     levelRandom.setBounds(area.removeFromLeft(rotaryWidth));
-    decayRandom.setBounds(area.removeFromLeft(rotaryWidth));
 }
 
 void ModulatorComponents::resized()
@@ -98,4 +89,41 @@ void ModulatorComponents::resized()
     mod3.setBounds(area.removeFromTop(90));
     mod2.setBounds(area.removeFromTop(90));
     mod1.setBounds(area.removeFromTop(90));
+}
+
+ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
+{
+    addAndMakeVisible(globalLabel);
+    globalLabel.setText("Global", juce::dontSendNotification);
+    globalLabel.setFont(juce::FontOptions(30));
+    globalLabel.setJustificationType(juce::Justification::centred);
+    
+    addAndMakeVisible(timeRandom);
+    timeRandom.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    timeRandom.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    timeRandomAttachment = std::make_unique<SliderAttachment>(parameters, "timeRandom", timeRandom);
+    
+    addAndMakeVisible(timeRandomLabel);
+    timeRandomLabel.setText("Rand. Time", juce::dontSendNotification);
+}
+
+void ModulatorGlobal::resized()
+{
+    auto area = getLocalBounds();
+    globalLabel.setBounds(area.removeFromTop(80));
+    
+    auto controlsArea = area.removeFromTop(200);
+    
+    auto rotaryRow1 = controlsArea.removeFromTop(110);
+    auto rotaryCell1 = rotaryRow1.removeFromLeft(rotaryWidth);
+    timeRandomLabel.setBounds(rotaryCell1.removeFromTop(20));
+    timeRandom.setBounds(rotaryCell1);
+}
+
+void ModulatorTab::resized()
+{
+    auto area = getLocalBounds();
+    mods.setBounds(area.removeFromLeft(300));
+    area.removeFromLeft(50);
+    globalMod.setBounds(area.removeFromLeft(200));
 }

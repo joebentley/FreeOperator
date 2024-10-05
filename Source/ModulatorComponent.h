@@ -33,9 +33,9 @@ private:
     
     int oscNumber;
     
-    juce::Slider coarseRandom, fineRandom, levelRandom, decayRandom;
-    juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, decayRandomLabel, oscNumLabel;
-    std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment, decayRandomAttachment;
+    juce::Slider coarseRandom, fineRandom, levelRandom;
+    juce::Label coarseRandomLabel, fineRandomLabel, levelRandomLabel, oscNumLabel;
+    std::unique_ptr<SliderAttachment> coarseRandomAttachment, fineRandomAttachment, levelRandomAttachment;
     
     juce::AudioParameterBool* fixedParameter;
     juce::AudioProcessorValueTreeState &parameters;
@@ -63,3 +63,35 @@ private:
     ModulatorComponent mod4;
 };
 
+class ModulatorGlobal : public juce::Component
+{
+using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+public:
+    ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters);
+    
+    void resized() override;
+private:
+    static constexpr int rotaryBoxWidth = 70;
+    static constexpr int rotaryBoxHeight = 20;
+    static constexpr int rotaryWidth = 80;
+    
+    juce::Label globalLabel;
+    juce::Slider timeRandom;
+    std::unique_ptr<SliderAttachment> timeRandomAttachment;
+    juce::Label timeRandomLabel;
+};
+
+class ModulatorTab : public juce::Component
+{
+public:
+    ModulatorTab(juce::AudioProcessorValueTreeState &parameters) : mods(parameters), globalMod(parameters)
+    {
+        addAndMakeVisible(mods);
+        addAndMakeVisible(globalMod);
+    }
+    
+    void resized() override;
+private:
+    ModulatorComponents mods;
+    ModulatorGlobal globalMod;
+};
