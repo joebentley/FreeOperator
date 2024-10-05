@@ -44,6 +44,11 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     
     addAndMakeVisible(toneLabel);
     toneLabel.setText("AA Filter", juce::dontSendNotification);
+    
+    addAndMakeVisible(mono);
+    monoAttachment = std::make_unique<ButtonAttachment>(parameters, "mono", mono);
+    addAndMakeVisible(monoLabel);
+    monoLabel.setText("Mono", juce::dontSendNotification);
 }
 
 FMsynthAudioProcessorEditor::~FMsynthAudioProcessorEditor()
@@ -66,10 +71,13 @@ void FMsynthAudioProcessorEditor::resized()
     
     tabs.setBounds(area.removeFromTop(480).reduced(5));
     
-    auto bottomArea = area.removeFromTop(90).withTrimmedLeft(120);
+    auto bottomArea = area.removeFromTop(90).withTrimmedLeft(80);
     algorithmLabel.setBounds(bottomArea.removeFromLeft(90));
     algorithm.setBounds(bottomArea.removeFromLeft(90));
     
     toneLabel.setBounds(bottomArea.removeFromLeft(90).withTrimmedLeft(20));
     tone.setBounds(bottomArea.removeFromLeft(90));
+    
+    monoLabel.setBounds(bottomArea.removeFromLeft(90).withTrimmedLeft(40));
+    mono.setBounds(bottomArea.removeFromLeft(40).withTrimmedLeft(8));
 }

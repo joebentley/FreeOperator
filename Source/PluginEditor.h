@@ -19,6 +19,7 @@
 class FMsynthAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     FMsynthAudioProcessorEditor (FMsynthAudioProcessor&, juce::AudioProcessorValueTreeState&);
     ~FMsynthAudioProcessorEditor() override;
@@ -42,12 +43,16 @@ private:
     ModulatorTab modTab;
     
     juce::Slider algorithm;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> algorithmAttachment;
+    std::unique_ptr<SliderAttachment> algorithmAttachment;
     juce::Label algorithmLabel;
     
     juce::Slider tone;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneAttachment;
+    std::unique_ptr<SliderAttachment> toneAttachment;
     juce::Label toneLabel;
+    
+    juce::ToggleButton mono;
+    std::unique_ptr<ButtonAttachment> monoAttachment;
+    juce::Label monoLabel;
     
     juce::AudioProcessorValueTreeState &parameters;
     
