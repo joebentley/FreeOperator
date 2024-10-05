@@ -31,8 +31,9 @@ public:
 private:
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     float renderSampleForAlgorithm();
-    void pushOntoSequence(const juce::String& parameterID, float valueToPush);
-    float getCurrentFromSequenceAndIncrement(const juce::String& parameterID);
+    void setSequenceAtCurrentIndex(const juce::String& parameterID, float valueToPush);
+    float getCurrentFromSequence(const juce::String& parameterID);
+    void incrementSequenceIndex();
     
     const float masterGain = juce::Decibels::decibelsToGain(-10.0);
     

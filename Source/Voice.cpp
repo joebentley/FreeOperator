@@ -80,31 +80,61 @@ void Voice::noteStarted()
     
     for (int i = 0; i < 4; ++i) {
         osc[i].setFrequency(0);
+        osc[i].setAmplitudeOffset(0);
         
-        int coarseRange;
-        juce::String sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Coarse";
-        
+        // Coarse setting
         if (!oscFixed[i]->get()) {
+            juce::String sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Coarse";
             if (useSequence) {
-                auto coarseOffset = getCurrentFromSequenceAndIncrement(sequenceParameterID);
+                auto coarseOffset = getCurrentFromSequence(sequenceParameterID);
                 osc[i].setFrequency((oscCoarse[i]->get() + coarseOffset) * freqHz);
             } else {
-                coarseRange = oscCoarseRandom[i]->get();
+                auto coarseRange = oscCoarseRandom[i]->get();
                 if (coarseRange > 0) {
                     auto generated = random.nextInt(coarseRange);
-                    pushOntoSequence(sequenceParameterID, generated);
+                    setSequenceAtCurrentIndex(sequenceParameterID, generated);
                     osc[i].setFrequency((oscCoarse[i]->get() + random.nextInt(coarseRange)) * freqHz);
-                } else
+                } else {
+                    setSequenceAtCurrentIndex(sequenceParameterID, 0.0);
                     osc[i].setFrequency(oscCoarse[i]->get() * freqHz + oscFine[i]->get());
+                }
             }
         }
+        
+        // Add fine setting
         osc[i].setFrequency(osc[i].getFrequency() + oscFine[i]->get());
         
-        auto fineRange = oscFineRandom[i]->get();
-        if (fineRange > 0.00001)
-            osc[i].setFrequency(osc[i].getFrequency() + random.nextFloat() * fineRange);
+        // Fine extra modulation (random or sequence)
+        juce::String sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Fine";
+        if (useSequence) {
+            auto fineOffset = getCurrentFromSequence(sequenceParameterID);
+            osc[i].setFrequency(osc[i].getFrequency() + fineOffset);
+        } else {
+            auto fineRange = oscFineRandom[i]->get();
+            if (fineRange > 0.00001) {
+                auto generated = random.nextFloat() * fineRange;
+                setSequenceAtCurrentIndex(sequenceParameterID, generated);
+                osc[i].setFrequency(osc[i].getFrequency() + generated);
+            } else {
+                setSequenceAtCurrentIndex(sequenceParameterID, 0.0);
+            }
+        }
         
-        osc[i].setAmplitudeOffset(random.nextFloat() * oscLevelRandom[i]->get());
+        // Level modulation (random or sequence)
+        sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Level";
+        if (useSequence) {
+            auto levelOffset = getCurrentFromSequence(sequenceParameterID);
+            osc[i].setAmplitudeOffset(levelOffset);
+        } else {
+            auto levelRange = oscLevelRandom[i]->get();
+            if (levelRange > 0.00001) {
+                auto generated = random.nextFloat() * oscLevelRandom[i]->get();
+                setSequenceAtCurrentIndex(sequenceParameterID, generated);
+                osc[i].setAmplitudeOffset(generated);
+            } else {
+                setSequenceAtCurrentIndex(sequenceParameterID, 0.0);
+            }
+        }
     }
     
     noteVelocity = velocity;
@@ -114,10 +144,19 @@ void Voice::noteStarted()
     for (int i = 0; i < 4; ++i)
         adsrParametersCopy[i] = adsrParameters[i];
     
-    if (timeRandom->get() > 0.000001f) {
-        auto decayOffset = random.nextFloat() * timeRandom->get();
+    if (useSequence) {
+        auto decayOffset = getCurrentFromSequence("sequenceTime");
         for (int i = 0; i < 4; ++i)
             adsrParametersCopy[i].decay += decayOffset;
+    } else {
+        if (timeRandom->get() > 0.000001f) {
+            auto generated = random.nextFloat() * timeRandom->get();
+            setSequenceAtCurrentIndex("sequenceTime", generated);
+            for (int i = 0; i < 4; ++i)
+                adsrParametersCopy[i].decay += generated;
+        } else {
+            setSequenceAtCurrentIndex("sequenceTime", 0.0);
+        }
     }
     
     for (int i = 0; i < 4; ++i)
@@ -125,6 +164,8 @@ void Voice::noteStarted()
     
     for (int i = 0; i < 4; ++i)
         adsrOsc[i].noteOn();
+    
+    incrementSequenceIndex();
 }
 
 void Voice::noteStopped(bool)
@@ -393,20 +434,22 @@ float Voice::renderSampleForAlgorithm()
     return sample;
 }
 
-void Voice::pushOntoSequence(const juce::String& parameterID, float valueToPush)
+void Voice::setSequenceAtCurrentIndex(const juce::String& parameterID, float valueToPush)
 {
-    auto var = parameters.state.getProperty(parameterID);
-    juce::Array<juce::var> *asArray = var.getArray();
-    asArray->remove(0);
-    asArray->add(valueToPush);
-//    parameters.state.setProperty(parameterID, *asArray, nullptr);
+    auto array = parameters.state.getProperty(parameterID);
+    int index = parameters.state.getProperty("sequenceIndex");
+    array[index] = valueToPush;
 }
 
-float Voice::getCurrentFromSequenceAndIncrement(const juce::String& parameterID)
+float Voice::getCurrentFromSequence(const juce::String& parameterID)
 {
-    auto var = parameters.state.getProperty(parameterID);
-    juce::Array<juce::var> *asArray = var.getArray();
-    int index = parameters.state.getProperty(parameterID + "Index");
-    parameters.state.setProperty(parameterID + "Index", (index + 1) % asArray->size(), nullptr);
-    return asArray->operator[](index);
+    auto array = parameters.state.getProperty(parameterID);
+    int index = parameters.state.getProperty("sequenceIndex");
+    return array[index];
+}
+
+void Voice::incrementSequenceIndex()
+{
+    int index = parameters.state.getProperty("sequenceIndex");
+    parameters.state.setProperty("sequenceIndex", (index + 1) % 8, nullptr);
 }

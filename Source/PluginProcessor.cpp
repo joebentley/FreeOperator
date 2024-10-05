@@ -34,7 +34,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc1Fine", 1),     "Osc 1 Fine",       nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterBool>(pid("osc1Fixed", 1),     "Osc 1 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1Volume", 1),   "Osc 1 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 1.0f),
-    std::make_unique<juce::AudioParameterInt>(pid("osc1CoarseRandom", 1), "Osc 1 Coarse Random", 0, 30, 1),
+    std::make_unique<juce::AudioParameterInt>(pid("osc1CoarseRandom", 1), "Osc 1 Coarse Random", 0, 30, 0),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1FineRandom", 1), "Osc 1 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterFloat>(pid("osc1LevelRandom", 1), "Osc 1 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
@@ -46,7 +46,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc2Fine", 1),     "Osc 2 Fine",       nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterBool>(pid("osc2Fixed", 1),     "Osc 2 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc2Volume", 1),   "Osc 2 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
-    std::make_unique<juce::AudioParameterInt>(pid("osc2CoarseRandom", 1), "Osc 2 Coarse Random", 0, 30, 1),
+    std::make_unique<juce::AudioParameterInt>(pid("osc2CoarseRandom", 1), "Osc 2 Coarse Random", 0, 30, 0),
     std::make_unique<juce::AudioParameterFloat>(pid("osc2FineRandom", 1), "Osc 2 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterFloat>(pid("osc2LevelRandom", 1), "Osc 2 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
@@ -58,7 +58,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc3Fine", 1),     "Osc 3 Fine",       nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterBool>(pid("osc3Fixed", 1),     "Osc 3 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc3Volume", 1),   "Osc 3 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
-    std::make_unique<juce::AudioParameterInt>(pid("osc3CoarseRandom", 1), "Osc 3 Coarse Random", 0, 30, 1),
+    std::make_unique<juce::AudioParameterInt>(pid("osc3CoarseRandom", 1), "Osc 3 Coarse Random", 0, 30, 0),
     std::make_unique<juce::AudioParameterFloat>(pid("osc3FineRandom", 1), "Osc 3 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterFloat>(pid("osc3LevelRandom", 1), "Osc 3 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
@@ -70,7 +70,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("osc4Fine", 1),     "Osc 4 Fine",       nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterBool>(pid("osc4Fixed", 1),     "Osc 4 Fixed", false),
     std::make_unique<juce::AudioParameterFloat>(pid("osc4Volume", 1),   "Osc 4 Volume",     nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
-    std::make_unique<juce::AudioParameterInt>(pid("osc4CoarseRandom", 1), "Osc 4 Coarse Random", 0, 30, 1),
+    std::make_unique<juce::AudioParameterInt>(pid("osc4CoarseRandom", 1), "Osc 4 Coarse Random", 0, 30, 0),
     std::make_unique<juce::AudioParameterFloat>(pid("osc4FineRandom", 1), "Osc 4 Fine Random", nrf(0.0f, 22000.0f, 0.001f, 0.3f), 0.0f),
     std::make_unique<juce::AudioParameterFloat>(pid("osc4LevelRandom", 1), "Osc 4 Level Random", nrf(0.0f, 1.0f, 0.00001f, 0.3f), 0.0f),
     
@@ -85,31 +85,19 @@ audioEngine(parameters)
 {
     float array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     parameters.state.setProperty("sequenceOsc1Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc1CoarseIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc1Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc1FineIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc1Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc1LevelIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc2Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2CoarseIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc2Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2FineIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc2Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2LevelIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc3Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3CoarseIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc3Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3FineIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc3Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3LevelIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc4Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4CoarseIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc4Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4FineIndex", 0, nullptr);
     parameters.state.setProperty("sequenceOsc4Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4LevelIndex", 0, nullptr);
     parameters.state.setProperty("sequenceTime",        juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceTimeIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceIndex", 0, nullptr);
 }
 
 FMsynthAudioProcessor::~FMsynthAudioProcessor()
