@@ -83,6 +83,27 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
 }
 
+Voice::~Voice()
+{
+    parameters.removeParameterListener("osc1Attack", this);
+    parameters.removeParameterListener("osc1Decay", this);
+    parameters.removeParameterListener("osc1Sustain", this);
+    parameters.removeParameterListener("osc1Release", this);
+    parameters.removeParameterListener("osc2Attack", this);
+    parameters.removeParameterListener("osc2Decay", this);
+    parameters.removeParameterListener("osc2Sustain", this);
+    parameters.removeParameterListener("osc2Release", this);
+    parameters.removeParameterListener("osc3Attack", this);
+    parameters.removeParameterListener("osc3Decay", this);
+    parameters.removeParameterListener("osc3Sustain", this);
+    parameters.removeParameterListener("osc3Release", this);
+    parameters.removeParameterListener("osc4Attack", this);
+    parameters.removeParameterListener("osc4Decay", this);
+    parameters.removeParameterListener("osc4Sustain", this);
+    parameters.removeParameterListener("osc4Release", this);
+    parameters.removeParameterListener("tone", this);
+}
+
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
 {
     adsrOsc1.setSampleRate(spec.sampleRate);

@@ -17,6 +17,8 @@ class Voice : public juce::MPESynthesiserVoice, public juce::AudioProcessorValue
 {
 public:
     Voice(juce::AudioProcessorValueTreeState &parameters);
+    ~Voice();
+    
     void prepare(const juce::dsp::ProcessSpec& spec);
     void noteStarted() override;
     void notePitchbendChanged() override {}
