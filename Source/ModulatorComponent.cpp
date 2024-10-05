@@ -107,6 +107,12 @@ ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
     
     addAndMakeVisible(timeRandomLabel);
     timeRandomLabel.setText("Rand. Time", juce::dontSendNotification);
+    
+    addAndMakeVisible(randomRepeat);
+    randomRepeatAttachment = std::make_unique<ButtonAttachment>(parameters, "randomRepeat", randomRepeat);
+    
+    addAndMakeVisible(randomRepeatLabel);
+    randomRepeatLabel.setText("Repeat Sequence", juce::dontSendNotification);
 }
 
 void ModulatorGlobal::resized()
@@ -117,9 +123,14 @@ void ModulatorGlobal::resized()
     auto controlsArea = area.removeFromTop(200);
     
     auto rotaryRow1 = controlsArea.removeFromTop(110);
-    auto rotaryCell1 = rotaryRow1.removeFromLeft(rotaryWidth);
-    timeRandomLabel.setBounds(rotaryCell1.removeFromTop(20));
-    timeRandom.setBounds(rotaryCell1);
+    auto rotaryRow1Cell1 = rotaryRow1.removeFromLeft(rotaryWidth);
+    timeRandomLabel.setBounds(rotaryRow1Cell1.removeFromTop(20));
+    timeRandom.setBounds(rotaryRow1Cell1);
+    
+    auto rotaryRow2 = controlsArea.removeFromTop(110);
+    auto rotaryRow2Cell1 = rotaryRow2.removeFromLeft(200);
+    randomRepeatLabel.setBounds(rotaryRow2Cell1.removeFromLeft(80));
+    randomRepeat.setBounds(rotaryRow2Cell1.removeFromLeft(40).withTrimmedLeft(8));
 }
 
 void ModulatorTab::resized()

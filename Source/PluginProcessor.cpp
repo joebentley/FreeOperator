@@ -78,10 +78,38 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("timeRandom", 1),   "Time Random", nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.0f),
     std::make_unique<juce::AudioParameterInt>(  pid("algorithm", 1),    "Algorithm",   1, 11, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("tone", 1),         "Tone",        nrf(1000.0f, 10000.0f, 0.01f, 0.27f), 5000.0f),
-    std::make_unique<juce::AudioParameterBool>(pid("mono", 1),          "Mono",        true)
+    std::make_unique<juce::AudioParameterBool>(pid("mono", 1),          "Mono",        true),
+    std::make_unique<juce::AudioParameterBool>(pid("randomRepeat", 1),  "Repeat Random Sequence", false),
 }),
 audioEngine(parameters)
 {
+    float array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    parameters.state.setProperty("sequenceOsc1Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc1CoarseIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc1Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc1FineIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc1Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc1LevelIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc2Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc2CoarseIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc2Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc2FineIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc2Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc2LevelIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc3Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc3CoarseIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc3Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc3FineIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc3Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc3LevelIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc4Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc4CoarseIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc4Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc4FineIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceOsc4Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceOsc4LevelIndex", 0, nullptr);
+    parameters.state.setProperty("sequenceTime",        juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    parameters.state.setProperty("sequenceTimeIndex", 0, nullptr);
 }
 
 FMsynthAudioProcessor::~FMsynthAudioProcessor()
@@ -218,17 +246,13 @@ juce::AudioProcessorEditor* FMsynthAudioProcessor::createEditor()
 void FMsynthAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     auto state = parameters.copyState();
-    std::unique_ptr<juce::XmlElement> xml(state.createXml());
-    copyXmlToBinary(*xml, destData);
+    auto memoryOutputStream = juce::MemoryOutputStream(destData, false);
+    state.writeToStream(memoryOutputStream);
 }
 
 void FMsynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
-    
-    if (xmlState.get() != nullptr)
-        if (xmlState->hasTagName(parameters.state.getType()))
-            parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+    parameters.replaceState(juce::ValueTree::readFromData(data, sizeInBytes));
 }
 
 //==============================================================================

@@ -81,6 +81,9 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
+    
+    // Sequences
+//    sequenceOsc1Coarse = parameters.state.getPropertyPointer("sequenceOsc1Coarse");
 }
 
 Voice::~Voice()
@@ -134,6 +137,7 @@ void Voice::prepare(const juce::dsp::ProcessSpec& spec)
 
 void Voice::noteStarted()
 {
+    bool useSequence = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get();
     auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
@@ -145,34 +149,48 @@ void Voice::noteStarted()
     int coarseRange;
     
     if (!osc1Fixed->get()) {
-        coarseRange = osc1CoarseRandom->get();
-        if (coarseRange > 0)
-            osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        else
-            osc1.setFrequency(osc1Coarse->get() * freqHz + osc1Fine->get());
+        if (useSequence) {
+            auto coarseOffset = getCurrentFromSequenceAndIncrement("sequenceOsc1Coarse");
+            osc1.setFrequency((osc1Coarse->get() + coarseOffset) * freqHz);
+        } else {
+            coarseRange = osc1CoarseRandom->get();
+            if (coarseRange > 0) {
+                auto generated = random.nextInt(coarseRange);
+                pushOntoSequence("sequenceOsc1Coarse", generated);
+                osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+            } else
+                osc1.setFrequency(osc1Coarse->get() * freqHz + osc1Fine->get());
+        }
     }
     
     if (!osc2Fixed->get()) {
         coarseRange = osc2CoarseRandom->get();
-        if (coarseRange > 0)
+        if (coarseRange > 0) {
+            auto generated = random.nextInt(coarseRange);
+            pushOntoSequence("sequenceOsc2Coarse", generated);
             osc2.setFrequency((osc2Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        else
+        } else
             osc2.setFrequency(osc2Coarse->get() * freqHz + osc2Fine->get());
     }
     
     if (!osc3Fixed->get()) {
         coarseRange = osc3CoarseRandom->get();
-        if (coarseRange > 0)
+        if (coarseRange > 0) {
+            auto generated = random.nextInt(coarseRange);
+            pushOntoSequence("sequenceOsc3Coarse", generated);
             osc3.setFrequency((osc3Coarse->get() + random.nextInt(coarseRange)) * freqHz);
+        }
         else
             osc3.setFrequency(osc3Coarse->get() * freqHz + osc3Fine->get());
     }
     
     if (!osc4Fixed->get()) {
         coarseRange = osc4CoarseRandom->get();
-        if (coarseRange > 0)
+        if (coarseRange > 0) {
+            auto generated = random.nextInt(coarseRange);
+            pushOntoSequence("sequenceOsc4Coarse", generated);
             osc4.setFrequency((osc4Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        else
+        } else
             osc4.setFrequency(osc4Coarse->get() * freqHz + osc4Fine->get());
     }
     
@@ -490,4 +508,22 @@ float Voice::renderSampleForAlgorithm()
     }
     
     return sample;
+}
+
+void Voice::pushOntoSequence(const juce::String& parameterID, float valueToPush)
+{
+    auto var = parameters.state.getProperty(parameterID);
+    juce::Array<juce::var> *asArray = var.getArray();
+    asArray->remove(0);
+    asArray->add(valueToPush);
+//    parameters.state.setProperty(parameterID, *asArray, nullptr);
+}
+
+float Voice::getCurrentFromSequenceAndIncrement(const juce::String& parameterID)
+{
+    auto var = parameters.state.getProperty(parameterID);
+    juce::Array<juce::var> *asArray = var.getArray();
+    int index = parameters.state.getProperty(parameterID + "Index");
+    parameters.state.setProperty(parameterID + "Index", (index + 1) % asArray->size(), nullptr);
+    return asArray->operator[](index);
 }

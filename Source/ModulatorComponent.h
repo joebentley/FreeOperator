@@ -66,6 +66,7 @@ private:
 class ModulatorGlobal : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters);
 
@@ -79,6 +80,10 @@ private:
     juce::Slider timeRandom;
     std::unique_ptr<SliderAttachment> timeRandomAttachment;
     juce::Label timeRandomLabel;
+    
+    juce::ToggleButton randomRepeat;
+    std::unique_ptr<ButtonAttachment> randomRepeatAttachment;
+    juce::Label randomRepeatLabel;
     
     juce::AudioProcessorValueTreeState &parameters;
 };
