@@ -78,7 +78,7 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterFloat>(pid("timeRandom", 1),   "Time Random", nrf(0.0f, 50.0f, 0.00001f, 0.27f), 0.0f),
     std::make_unique<juce::AudioParameterInt>(  pid("algorithm", 1),    "Algorithm",   1, 11, 1),
     std::make_unique<juce::AudioParameterFloat>(pid("tone", 1),         "Tone",        nrf(1000.0f, 10000.0f, 0.01f, 0.27f), 5000.0f),
-    std::make_unique<juce::AudioParameterBool>(pid("mono", 1),          "Mono",        false)
+    std::make_unique<juce::AudioParameterBool>(pid("mono", 1),          "Mono",        true)
 }),
 audioEngine(parameters)
 {

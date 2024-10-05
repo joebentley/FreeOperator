@@ -63,17 +63,14 @@ private:
     ModulatorComponent mod4;
 };
 
-class ModulatorGlobal : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
+class ModulatorGlobal : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 public:
     ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters);
-    ~ModulatorGlobal();
-    
+
     void resized() override;
 private:
-    void parameterChanged (const juce::String& parameterID, float newValue) override;
-    
     static constexpr int rotaryBoxWidth = 70;
     static constexpr int rotaryBoxHeight = 20;
     static constexpr int rotaryWidth = 80;
