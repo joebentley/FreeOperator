@@ -41,51 +41,21 @@ private:
     float noteVelocity = 0.0;
     int algorithm = 0;
     
-    Oscillator osc1;
-    Oscillator osc2;
-    Oscillator osc3;
-    Oscillator osc4;
+    Oscillator osc[4];
     
-    juce::AudioParameterFloat *osc1Volume;
-    juce::AudioParameterFloat *osc2Volume;
-    juce::AudioParameterFloat *osc3Volume;
-    juce::AudioParameterFloat *osc4Volume;
-    juce::AudioParameterInt *osc1Coarse;
-    juce::AudioParameterInt *osc2Coarse;
-    juce::AudioParameterInt *osc3Coarse;
-    juce::AudioParameterInt *osc4Coarse;
-    juce::AudioParameterFloat *osc1Fine;
-    juce::AudioParameterFloat *osc2Fine;
-    juce::AudioParameterFloat *osc3Fine;
-    juce::AudioParameterFloat *osc4Fine;
-    juce::AudioParameterBool *osc1Fixed;
-    juce::AudioParameterBool *osc2Fixed;
-    juce::AudioParameterBool *osc3Fixed;
-    juce::AudioParameterBool *osc4Fixed;
+    juce::AudioParameterFloat   *oscVolume[4];
+    juce::AudioParameterInt     *oscCoarse[4];
+    juce::AudioParameterFloat   *oscFine[4];
+    juce::AudioParameterBool    *oscFixed[4];
     
-    juce::AudioParameterInt     *osc1CoarseRandom;
-    juce::AudioParameterInt     *osc2CoarseRandom;
-    juce::AudioParameterInt     *osc3CoarseRandom;
-    juce::AudioParameterInt     *osc4CoarseRandom;
-    juce::AudioParameterFloat   *osc1FineRandom;
-    juce::AudioParameterFloat   *osc2FineRandom;
-    juce::AudioParameterFloat   *osc3FineRandom;
-    juce::AudioParameterFloat   *osc4FineRandom;
-    juce::AudioParameterFloat   *osc1LevelRandom;
-    juce::AudioParameterFloat   *osc2LevelRandom;
-    juce::AudioParameterFloat   *osc3LevelRandom;
-    juce::AudioParameterFloat   *osc4LevelRandom;
+    juce::AudioParameterInt     *oscCoarseRandom[4];
+    juce::AudioParameterFloat   *oscFineRandom[4];
+    juce::AudioParameterFloat   *oscLevelRandom[4];
     
     juce::AudioParameterFloat   *timeRandom;
     
-    juce::ADSR adsrOsc1;
-    juce::ADSR adsrOsc2;
-    juce::ADSR adsrOsc3;
-    juce::ADSR adsrOsc4;
-    juce::ADSR::Parameters adsrParameters1;
-    juce::ADSR::Parameters adsrParameters2;
-    juce::ADSR::Parameters adsrParameters3;
-    juce::ADSR::Parameters adsrParameters4;
+    juce::ADSR adsrOsc[4];
+    juce::ADSR::Parameters adsrParameters[4];
     
     juce::AudioProcessorValueTreeState &parameters;
     

@@ -12,123 +12,60 @@
 
 Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(parametersToUse)
 {
-    adsrParameters1.attack  = parameters.getParameterAsValue("osc1Attack").getValue();
-    adsrParameters1.decay   = parameters.getParameterAsValue("osc1Decay").getValue();
-    adsrParameters1.sustain = parameters.getParameterAsValue("osc1Sustain").getValue();
-    adsrParameters1.release = parameters.getParameterAsValue("osc1Release").getValue();
-    adsrParameters2.attack  = parameters.getParameterAsValue("osc2Attack").getValue();
-    adsrParameters2.decay   = parameters.getParameterAsValue("osc2Decay").getValue();
-    adsrParameters2.sustain = parameters.getParameterAsValue("osc2Sustain").getValue();
-    adsrParameters2.release = parameters.getParameterAsValue("osc2Release").getValue();
-    adsrParameters3.attack  = parameters.getParameterAsValue("osc3Attack").getValue();
-    adsrParameters3.decay   = parameters.getParameterAsValue("osc3Decay").getValue();
-    adsrParameters3.sustain = parameters.getParameterAsValue("osc3Sustain").getValue();
-    adsrParameters3.release = parameters.getParameterAsValue("osc3Release").getValue();
-    adsrParameters4.attack  = parameters.getParameterAsValue("osc4Attack").getValue();
-    adsrParameters4.decay   = parameters.getParameterAsValue("osc4Decay").getValue();
-    adsrParameters4.sustain = parameters.getParameterAsValue("osc4Sustain").getValue();
-    adsrParameters4.release = parameters.getParameterAsValue("osc4Release").getValue();
+    for (int i = 0; i < 4; ++i) {
+        adsrParameters[i].attack    = parameters.getParameterAsValue("osc" + juce::String(i+1) + "Attack").getValue();
+        adsrParameters[i].decay     = parameters.getParameterAsValue("osc" + juce::String(i+1) + "Decay").getValue();
+        adsrParameters[i].sustain   = parameters.getParameterAsValue("osc" + juce::String(i+1) + "Sustain").getValue();
+        adsrParameters[i].release   = parameters.getParameterAsValue("osc" + juce::String(i+1) + "Release").getValue();
+    }
     
-    parameters.addParameterListener("osc1Attack", this);
-    parameters.addParameterListener("osc1Decay", this);
-    parameters.addParameterListener("osc1Sustain", this);
-    parameters.addParameterListener("osc1Release", this);
-    parameters.addParameterListener("osc2Attack", this);
-    parameters.addParameterListener("osc2Decay", this);
-    parameters.addParameterListener("osc2Sustain", this);
-    parameters.addParameterListener("osc2Release", this);
-    parameters.addParameterListener("osc3Attack", this);
-    parameters.addParameterListener("osc3Decay", this);
-    parameters.addParameterListener("osc3Sustain", this);
-    parameters.addParameterListener("osc3Release", this);
-    parameters.addParameterListener("osc4Attack", this);
-    parameters.addParameterListener("osc4Decay", this);
-    parameters.addParameterListener("osc4Sustain", this);
-    parameters.addParameterListener("osc4Release", this);
+    for (int i = 0; i < 4; ++i) {
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Attack", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Decay", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Sustain", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Release", this);
+    }
+    
     parameters.addParameterListener("tone", this);
     
-    osc1Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1Volume"));
-    osc2Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2Volume"));
-    osc3Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3Volume"));
-    osc4Volume = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4Volume"));
-    osc1Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1Coarse"));
-    osc2Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2Coarse"));
-    osc3Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3Coarse"));
-    osc4Coarse = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4Coarse"));
-    osc1Fine = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1Fine"));
-    osc2Fine = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2Fine"));
-    osc3Fine = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3Fine"));
-    osc4Fine = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4Fine"));
-    osc1Fixed = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("osc1Fixed"));
-    osc2Fixed = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("osc1Fixed"));
-    osc3Fixed = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("osc3Fixed"));
-    osc4Fixed = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("osc4Fixed"));
-    
-    osc1CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc1CoarseRandom"));
-    osc2CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc2CoarseRandom"));
-    osc3CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc3CoarseRandom"));
-    osc4CoarseRandom = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc4CoarseRandom"));
-    osc1FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1FineRandom"));
-    osc2FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2FineRandom"));
-    osc3FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3FineRandom"));
-    osc4FineRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4FineRandom"));
-    osc1LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc1LevelRandom"));
-    osc2LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc2LevelRandom"));
-    osc3LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc3LevelRandom"));
-    osc4LevelRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc4LevelRandom"));
+    for (int i = 0; i < 4; i++) {
+        oscVolume[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "Volume"));
+        oscCoarse[i] = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc" + juce::String(i+1) + "Coarse"));
+        oscFine[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "Fine"));
+        oscFixed[i] = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("osc" + juce::String(i+1) + "Fixed"));
+        oscCoarseRandom[i] = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc" + juce::String(i+1) + "CoarseRandom"));
+        oscFineRandom[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "FineRandom"));
+        oscLevelRandom[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "LevelRandom"));
+    }
     
     timeRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("timeRandom"));
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
-    
-    // Sequences
-//    sequenceOsc1Coarse = parameters.state.getPropertyPointer("sequenceOsc1Coarse");
 }
 
 Voice::~Voice()
 {
-    parameters.removeParameterListener("osc1Attack", this);
-    parameters.removeParameterListener("osc1Decay", this);
-    parameters.removeParameterListener("osc1Sustain", this);
-    parameters.removeParameterListener("osc1Release", this);
-    parameters.removeParameterListener("osc2Attack", this);
-    parameters.removeParameterListener("osc2Decay", this);
-    parameters.removeParameterListener("osc2Sustain", this);
-    parameters.removeParameterListener("osc2Release", this);
-    parameters.removeParameterListener("osc3Attack", this);
-    parameters.removeParameterListener("osc3Decay", this);
-    parameters.removeParameterListener("osc3Sustain", this);
-    parameters.removeParameterListener("osc3Release", this);
-    parameters.removeParameterListener("osc4Attack", this);
-    parameters.removeParameterListener("osc4Decay", this);
-    parameters.removeParameterListener("osc4Sustain", this);
-    parameters.removeParameterListener("osc4Release", this);
+    for (int i = 0; i < 4; ++i) {
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Attack", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Decay", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Sustain", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Release", this);
+    }
+    
     parameters.removeParameterListener("tone", this);
 }
 
 void Voice::prepare(const juce::dsp::ProcessSpec& spec)
 {
-    adsrOsc1.setSampleRate(spec.sampleRate);
-    adsrOsc2.setSampleRate(spec.sampleRate);
-    adsrOsc3.setSampleRate(spec.sampleRate);
-    adsrOsc4.setSampleRate(spec.sampleRate);
-
-    osc1.setSampleRate((float)spec.sampleRate);
-    osc2.setSampleRate((float)spec.sampleRate);
-    osc3.setSampleRate((float)spec.sampleRate);
-    osc4.setSampleRate((float)spec.sampleRate);
-    
-    auto filterCoefficients = juce::IIRCoefficients::makeLowPass(spec.sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
-    osc1.setFilterCoefficients(filterCoefficients);
-    osc2.setFilterCoefficients(filterCoefficients);
-    osc3.setFilterCoefficients(filterCoefficients);
-    osc4.setFilterCoefficients(filterCoefficients);
-    
-    osc1.reset();
-    osc2.reset();
-    osc3.reset();
-    osc4.reset();
+    for (int i = 0; i < 4; ++i) {
+        adsrOsc[i].setSampleRate(spec.sampleRate);
+        osc[i].setSampleRate((float)spec.sampleRate);
+        
+        auto filterCoefficients = juce::IIRCoefficients::makeLowPass(spec.sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
+        osc[i].setFilterCoefficients(filterCoefficients);
+        osc[i].reset();
+    }
     
     tempBuffer.setSize(spec.numChannels, spec.maximumBlockSize);
     
@@ -141,180 +78,117 @@ void Voice::noteStarted()
     auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
     auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
     
-    osc1.setFrequency(0);
-    osc2.setFrequency(0);
-    osc3.setFrequency(0);
-    osc4.setFrequency(0);
-    
-    int coarseRange;
-    
-    if (!osc1Fixed->get()) {
-        if (useSequence) {
-            auto coarseOffset = getCurrentFromSequenceAndIncrement("sequenceOsc1Coarse");
-            osc1.setFrequency((osc1Coarse->get() + coarseOffset) * freqHz);
-        } else {
-            coarseRange = osc1CoarseRandom->get();
-            if (coarseRange > 0) {
-                auto generated = random.nextInt(coarseRange);
-                pushOntoSequence("sequenceOsc1Coarse", generated);
-                osc1.setFrequency((osc1Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-            } else
-                osc1.setFrequency(osc1Coarse->get() * freqHz + osc1Fine->get());
+    for (int i = 0; i < 4; ++i) {
+        osc[i].setFrequency(0);
+        
+        int coarseRange;
+        juce::String sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Coarse";
+        
+        if (!oscFixed[i]->get()) {
+            if (useSequence) {
+                auto coarseOffset = getCurrentFromSequenceAndIncrement(sequenceParameterID);
+                osc[i].setFrequency((oscCoarse[i]->get() + coarseOffset) * freqHz);
+            } else {
+                coarseRange = oscCoarseRandom[i]->get();
+                if (coarseRange > 0) {
+                    auto generated = random.nextInt(coarseRange);
+                    pushOntoSequence(sequenceParameterID, generated);
+                    osc[i].setFrequency((oscCoarse[i]->get() + random.nextInt(coarseRange)) * freqHz);
+                } else
+                    osc[i].setFrequency(oscCoarse[i]->get() * freqHz + oscFine[i]->get());
+            }
         }
+        osc[i].setFrequency(osc[i].getFrequency() + oscFine[i]->get());
+        
+        auto fineRange = oscFineRandom[i]->get();
+        if (fineRange > 0.00001)
+            osc[i].setFrequency(osc[i].getFrequency() + random.nextFloat() * fineRange);
+        
+        osc[i].setAmplitudeOffset(random.nextFloat() * oscLevelRandom[i]->get());
     }
-    
-    if (!osc2Fixed->get()) {
-        coarseRange = osc2CoarseRandom->get();
-        if (coarseRange > 0) {
-            auto generated = random.nextInt(coarseRange);
-            pushOntoSequence("sequenceOsc2Coarse", generated);
-            osc2.setFrequency((osc2Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        } else
-            osc2.setFrequency(osc2Coarse->get() * freqHz + osc2Fine->get());
-    }
-    
-    if (!osc3Fixed->get()) {
-        coarseRange = osc3CoarseRandom->get();
-        if (coarseRange > 0) {
-            auto generated = random.nextInt(coarseRange);
-            pushOntoSequence("sequenceOsc3Coarse", generated);
-            osc3.setFrequency((osc3Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        }
-        else
-            osc3.setFrequency(osc3Coarse->get() * freqHz + osc3Fine->get());
-    }
-    
-    if (!osc4Fixed->get()) {
-        coarseRange = osc4CoarseRandom->get();
-        if (coarseRange > 0) {
-            auto generated = random.nextInt(coarseRange);
-            pushOntoSequence("sequenceOsc4Coarse", generated);
-            osc4.setFrequency((osc4Coarse->get() + random.nextInt(coarseRange)) * freqHz);
-        } else
-            osc4.setFrequency(osc4Coarse->get() * freqHz + osc4Fine->get());
-    }
-    
-    osc1.setFrequency(osc1.getFrequency() + osc1Fine->get());
-    osc2.setFrequency(osc2.getFrequency() + osc2Fine->get());
-    osc3.setFrequency(osc3.getFrequency() + osc3Fine->get());
-    osc4.setFrequency(osc4.getFrequency() + osc4Fine->get());
-    
-    auto fineRange = osc1FineRandom->get();
-    if (fineRange > 0.00001)
-        osc1.setFrequency(osc1.getFrequency() + random.nextFloat() * fineRange);
-    
-    fineRange = osc2FineRandom->get();
-    if (fineRange > 0.00001)
-        osc2.setFrequency(osc2.getFrequency() + random.nextFloat() * fineRange);
-    
-    fineRange = osc3FineRandom->get();
-    if (fineRange > 0.00001)
-        osc3.setFrequency(osc3.getFrequency() + random.nextFloat() * fineRange);
-    
-    fineRange = osc4FineRandom->get();
-    if (fineRange > 0.00001)
-        osc4.setFrequency(osc4.getFrequency() + random.nextFloat() * fineRange);
-    
-    osc1.setAmplitudeOffset(random.nextFloat() * osc1LevelRandom->get());
-    osc2.setAmplitudeOffset(random.nextFloat() * osc2LevelRandom->get());
-    osc3.setAmplitudeOffset(random.nextFloat() * osc3LevelRandom->get());
-    osc4.setAmplitudeOffset(random.nextFloat() * osc4LevelRandom->get());
     
     noteVelocity = velocity;
     
-    auto adsrParameters1Copy = adsrParameters1;
-    auto adsrParameters2Copy = adsrParameters2;
-    auto adsrParameters3Copy = adsrParameters3;
-    auto adsrParameters4Copy = adsrParameters4;
+    juce::ADSR::Parameters adsrParametersCopy[4];
+    
+    for (int i = 0; i < 4; ++i)
+        adsrParametersCopy[i] = adsrParameters[i];
     
     if (timeRandom->get() > 0.000001f) {
         auto decayOffset = random.nextFloat() * timeRandom->get();
-        adsrParameters1Copy.decay += decayOffset;
-        adsrParameters2Copy.decay += decayOffset;
-        adsrParameters3Copy.decay += decayOffset;
-        adsrParameters4Copy.decay += decayOffset;
+        for (int i = 0; i < 4; ++i)
+            adsrParametersCopy[i].decay += decayOffset;
     }
     
-    adsrOsc1.setParameters(adsrParameters1Copy);
-    adsrOsc2.setParameters(adsrParameters2Copy);
-    adsrOsc3.setParameters(adsrParameters3Copy);
-    adsrOsc4.setParameters(adsrParameters4Copy);
+    for (int i = 0; i < 4; ++i)
+        adsrOsc[i].setParameters(adsrParametersCopy[i]);
     
-    adsrOsc1.noteOn();
-    adsrOsc2.noteOn();
-    adsrOsc3.noteOn();
-    adsrOsc4.noteOn();
+    for (int i = 0; i < 4; ++i)
+        adsrOsc[i].noteOn();
 }
 
 void Voice::noteStopped(bool)
 {
-    adsrOsc1.noteOff();
-    adsrOsc2.noteOff();
-    adsrOsc3.noteOff();
-    adsrOsc4.noteOff();
+    for (int i = 0; i < 4; ++i)
+        adsrOsc[i].noteOff();
 }
 
 void Voice::parameterChanged (const juce::String& parameterID, float newValue)
 {
     if (parameterID == "osc1Attack")
-        adsrParameters1.attack = newValue;
+        adsrParameters[0].attack = newValue;
     else if (parameterID == "osc1Decay")
-        adsrParameters1.decay = newValue;
+        adsrParameters[0].decay = newValue;
     else if (parameterID == "osc1Sustain")
-        adsrParameters1.sustain = newValue;
+        adsrParameters[0].sustain = newValue;
     else if (parameterID == "osc1Release")
-        adsrParameters1.release = newValue;
+        adsrParameters[0].release = newValue;
     else if (parameterID == "osc2Attack")
-        adsrParameters2.attack = newValue;
+        adsrParameters[1].attack = newValue;
     else if (parameterID == "osc2Decay")
-        adsrParameters2.decay = newValue;
+        adsrParameters[1].decay = newValue;
     else if (parameterID == "osc2Sustain")
-        adsrParameters2.sustain = newValue;
+        adsrParameters[1].sustain = newValue;
     else if (parameterID == "osc2Release")
-        adsrParameters2.release = newValue;
+        adsrParameters[1].release = newValue;
     else if (parameterID == "osc3Attack")
-        adsrParameters3.attack = newValue;
+        adsrParameters[2].attack = newValue;
     else if (parameterID == "osc3Decay")
-        adsrParameters3.decay = newValue;
+        adsrParameters[2].decay = newValue;
     else if (parameterID == "osc3Sustain")
-        adsrParameters3.sustain = newValue;
+        adsrParameters[2].sustain = newValue;
     else if (parameterID == "osc3Release")
-        adsrParameters3.release = newValue;
+        adsrParameters[2].release = newValue;
     else if (parameterID == "osc4Attack")
-        adsrParameters4.attack = newValue;
+        adsrParameters[3].attack = newValue;
     else if (parameterID == "osc4Decay")
-        adsrParameters4.decay = newValue;
+        adsrParameters[3].decay = newValue;
     else if (parameterID == "osc4Sustain")
-        adsrParameters4.sustain = newValue;
+        adsrParameters[3].sustain = newValue;
     else if (parameterID == "osc4Release")
-        adsrParameters4.release = newValue;
+        adsrParameters[3].release = newValue;
     else if (parameterID == "algorithm")
         algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
     else if (parameterID == "tone") {
         auto filterCoefficients = juce::IIRCoefficients::makeLowPass(sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
-        osc1.setFilterCoefficients(filterCoefficients);
-        osc2.setFilterCoefficients(filterCoefficients);
-        osc3.setFilterCoefficients(filterCoefficients);
-        osc4.setFilterCoefficients(filterCoefficients);
+        for (int i = 0; i < 4; ++i)
+            osc[i].setFilterCoefficients(filterCoefficients);
     }
 }
 
 void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
-    if (isActive() && adsrOsc1.isActive() == false) {
+    if (isActive() && adsrOsc[0].isActive() == false) {
 //        DBG("Main ADSR end");
-        adsrOsc1.setParameters(adsrParameters1);
-        adsrOsc2.setParameters(adsrParameters2);
-        adsrOsc3.setParameters(adsrParameters3);
-        adsrOsc4.setParameters(adsrParameters4);
+        for (int i = 0; i < 4; ++i)
+            adsrOsc[i].setParameters(adsrParameters[i]);
         clearCurrentNote();
         return;
     }
     
-    osc1.setAmplitude(osc1Volume->get());
-    osc2.setAmplitude(osc2Volume->get());
-    osc3.setAmplitude(osc3Volume->get());
-    osc4.setAmplitude(osc4Volume->get());
+    for (int i = 0; i < 4; i++) {
+        osc[i].setAmplitude(oscVolume[i]->get());
+    }
     
     auto audioBlock = juce::dsp::AudioBlock<float>(tempBuffer).getSubBlock(startSample, numSamples);
     audioBlock.clear();
@@ -336,6 +210,15 @@ float Voice::renderSampleForAlgorithm()
     jassert(algorithm < 12);
     
     float sample = 0.0;
+    
+    auto &osc1 = osc[0];
+    auto &osc2 = osc[1];
+    auto &osc3 = osc[2];
+    auto &osc4 = osc[3];
+    auto &adsrOsc1 = adsrOsc[0];
+    auto &adsrOsc2 = adsrOsc[1];
+    auto &adsrOsc3 = adsrOsc[2];
+    auto &adsrOsc4 = adsrOsc[3];
     
     // Ableton Operator algos
     switch(algorithm) {
