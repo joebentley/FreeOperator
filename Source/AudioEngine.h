@@ -18,6 +18,8 @@ public:
     static constexpr auto maxNumVoices = 8;
     
     AudioEngine(juce::AudioProcessorValueTreeState &parameters);
+    ~AudioEngine();
+    
     void prepare(const juce::dsp::ProcessSpec& spec) noexcept;
     
 private:

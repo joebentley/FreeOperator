@@ -34,6 +34,10 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     fineRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "FineRandom", fineRandom);
     levelRandomAttachment = std::make_unique<SliderAttachment>(parameters, parameterPrefix + "LevelRandom", levelRandom);
     
+    parameters.addParameterListener(parameterPrefix + "CoarseRandom", this);
+    parameters.addParameterListener(parameterPrefix + "FineRandom", this);
+    parameters.addParameterListener(parameterPrefix + "LevelRandom", this);
+    
     addAndMakeVisible(oscNumLabel);
     oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
     oscNumLabel.setFont(juce::FontOptions(20));
@@ -55,13 +59,26 @@ ModulatorComponent::~ModulatorComponent()
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     parameters.removeParameterListener(parameterPrefix + "Fixed", this);
+    parameters.removeParameterListener(parameterPrefix + "CoarseRandom", this);
+    parameters.removeParameterListener(parameterPrefix + "FineRandom", this);
+    parameters.removeParameterListener(parameterPrefix + "LevelRandom", this);
 }
 
 void ModulatorComponent::parameterChanged (const juce::String& parameterID, float newValue)
 {
+    juce::Value monoParameter = parameters.getParameterAsValue("mono");
+    
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     if (parameterID == parameterPrefix + "Fixed")
         coarseRandom.setEnabled(!fixedParameter->get());
+    else if (parameterID == parameterPrefix + "CoarseRandom" ||
+             parameterID == parameterPrefix + "FineRandom" ||
+             parameterID == parameterPrefix + "LevelRandom") {
+        if (newValue > 0.0)
+            monoParameter.setValue(true);
+        else
+            monoParameter.setValue(false);
+    }
 }
 
 void ModulatorComponent::resized()
@@ -91,7 +108,7 @@ void ModulatorComponents::resized()
     mod1.setBounds(area.removeFromTop(90));
 }
 
-ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
+ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters) : parameters(parameters)
 {
     addAndMakeVisible(globalLabel);
     globalLabel.setText("Global", juce::dontSendNotification);
@@ -105,6 +122,25 @@ ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
     
     addAndMakeVisible(timeRandomLabel);
     timeRandomLabel.setText("Rand. Time", juce::dontSendNotification);
+    
+    parameters.addParameterListener("timeRandom", this);
+}
+
+ModulatorGlobal::~ModulatorGlobal()
+{
+    parameters.removeParameterListener("timeRandom", this);
+}
+
+void ModulatorGlobal::parameterChanged (const juce::String& parameterID, float newValue)
+{
+    auto monoParameter = parameters.getParameter("mono");
+    
+    if (parameterID == "timeRandom") {
+        if (newValue > 0.0)
+            monoParameter->setValueNotifyingHost(1.0);
+        else
+            monoParameter->setValueNotifyingHost(0.0);
+    }
 }
 
 void ModulatorGlobal::resized()

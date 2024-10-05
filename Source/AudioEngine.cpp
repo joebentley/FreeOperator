@@ -27,6 +27,11 @@ AudioEngine::AudioEngine(juce::AudioProcessorValueTreeState &parameters) : param
     setVoiceStealingEnabled(true);
 }
 
+AudioEngine::~AudioEngine()
+{
+    parameters.removeParameterListener("mono", this);
+}
+
 void AudioEngine::prepare(const juce::dsp::ProcessSpec& spec) noexcept
 {
     this->spec = spec;
