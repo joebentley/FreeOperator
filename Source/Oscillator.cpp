@@ -21,13 +21,19 @@ Oscillator::Oscillator()
 
 void Oscillator::setPhaseOffset(float phaseOffset)
 {
+    if (!overdrivePhase)
+        phaseOffset *= 4.0;
+    
     // simple lpf
     this->phaseOffset = filter.processSingleSampleRaw(phaseOffset);
 }
 
 float Oscillator::processSample()
 {
-    phase += frequency * (1.f / sampleRate);
+    if (overdrivePhase)
+        phase += frequency * (1.f / sampleRate) + phaseOffset;
+    else
+        phase += frequency * (1.f / sampleRate);
     
     if (phase < 0.0)
         phase += 1.0;
@@ -35,9 +41,10 @@ float Oscillator::processSample()
         phase -= 1.0;
     
     auto tempPhase = phase + phaseOffset;
-    if (tempPhase < 0.0)
+        
+    while (tempPhase < 0.0)
         tempPhase += 1.0;
-    if (tempPhase > 1.0)
+    while (tempPhase > 1.0)
         tempPhase -= 1.0;
     
     int lowerIndex = std::floor(tempPhase * 1024.0);

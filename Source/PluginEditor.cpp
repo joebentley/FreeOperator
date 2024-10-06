@@ -49,6 +49,11 @@ FMsynthAudioProcessorEditor::FMsynthAudioProcessorEditor (FMsynthAudioProcessor&
     monoAttachment = std::make_unique<ButtonAttachment>(parameters, "mono", mono);
     addAndMakeVisible(monoLabel);
     monoLabel.setText("Mono", juce::dontSendNotification);
+    
+    addAndMakeVisible(overdrivePhase);
+    overdrivePhaseAttachment = std::make_unique<ButtonAttachment>(parameters, "overdrivePhase", overdrivePhase);
+    addAndMakeVisible(overdrivePhaseLabel);
+    overdrivePhaseLabel.setText("Overdrive Phase", juce::dontSendNotification);
 }
 
 FMsynthAudioProcessorEditor::~FMsynthAudioProcessorEditor()
@@ -71,7 +76,7 @@ void FMsynthAudioProcessorEditor::resized()
     
     tabs.setBounds(area.removeFromTop(480).reduced(5));
     
-    auto bottomArea = area.removeFromTop(90).withTrimmedLeft(80);
+    auto bottomArea = area.removeFromTop(90).withTrimmedLeft(10);
     algorithmLabel.setBounds(bottomArea.removeFromLeft(90));
     algorithm.setBounds(bottomArea.removeFromLeft(90));
     
@@ -80,4 +85,7 @@ void FMsynthAudioProcessorEditor::resized()
     
     monoLabel.setBounds(bottomArea.removeFromLeft(90).withTrimmedLeft(40));
     mono.setBounds(bottomArea.removeFromLeft(40).withTrimmedLeft(8));
+    
+    overdrivePhaseLabel.setBounds(bottomArea.removeFromLeft(100).withTrimmedLeft(0));
+    overdrivePhase.setBounds(bottomArea.removeFromLeft(30).withTrimmedLeft(8));
 }

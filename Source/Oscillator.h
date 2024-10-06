@@ -22,6 +22,7 @@ public:
     void setPhaseOffset(float phaseOffset);
     void setAmplitude(float amplitude) { this->amplitude = amplitude; }
     void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
+    void setOverdrivePhase(bool overdrivePhase) { this->overdrivePhase = overdrivePhase; } // whether or not to use broken old phase accumulation
     void setFilterCoefficients(const juce::IIRCoefficients &newCoefficients) { filter.setCoefficients(newCoefficients); }
     
     float getFrequency() { return frequency; }
@@ -36,6 +37,7 @@ private:
     float sampleRate = 0.0;
     float amplitude = 1.0;
     float amplitudeOffset = 0.0;
+    bool overdrivePhase = false;
     
     juce::IIRFilter filter;
     

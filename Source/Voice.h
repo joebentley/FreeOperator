@@ -55,6 +55,8 @@ private:
     
     juce::AudioParameterFloat   *timeRandom;
     
+    juce::AudioParameterBool    *overdrivePhase;
+    
     juce::ADSR adsrOsc[4];
     juce::ADSR::Parameters adsrParameters[4];
     

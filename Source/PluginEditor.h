@@ -54,6 +54,10 @@ private:
     std::unique_ptr<ButtonAttachment> monoAttachment;
     juce::Label monoLabel;
     
+    juce::ToggleButton overdrivePhase;
+    std::unique_ptr<ButtonAttachment> overdrivePhaseAttachment;
+    juce::Label overdrivePhaseLabel;
+    
     juce::AudioProcessorValueTreeState &parameters;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FMsynthAudioProcessorEditor)

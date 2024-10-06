@@ -42,6 +42,8 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
+    
+    overdrivePhase = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("overdrivePhase"));
 }
 
 Voice::~Voice()
@@ -230,6 +232,7 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
     
     for (int i = 0; i < 4; i++) {
         osc[i].setAmplitude(oscVolume[i]->get());
+        osc[i].setOverdrivePhase(overdrivePhase->get());
     }
     
     auto audioBlock = juce::dsp::AudioBlock<float>(tempBuffer).getSubBlock(startSample, numSamples);
