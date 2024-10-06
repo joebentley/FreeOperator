@@ -47,12 +47,13 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
 Voice::~Voice()
 {
     for (int i = 0; i < 4; ++i) {
-        parameters.addParameterListener("osc" + juce::String(i+1) + "Attack", this);
-        parameters.addParameterListener("osc" + juce::String(i+1) + "Decay", this);
-        parameters.addParameterListener("osc" + juce::String(i+1) + "Sustain", this);
-        parameters.addParameterListener("osc" + juce::String(i+1) + "Release", this);
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Attack", this);
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Decay", this);
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Sustain", this);
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Release", this);
     }
     
+    parameters.removeParameterListener("algorithm", this);
     parameters.removeParameterListener("tone", this);
 }
 
