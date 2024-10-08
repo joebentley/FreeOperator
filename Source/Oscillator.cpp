@@ -31,9 +31,9 @@ void Oscillator::setPhaseOffset(float phaseOffset)
 float Oscillator::processSample()
 {
     if (overdrivePhase)
-        phase += frequency * (1.f / sampleRate) + phaseOffset;
+        phase += (frequency + fineOffset) * (1.f / sampleRate) + phaseOffset;
     else
-        phase += frequency * (1.f / sampleRate);
+        phase += (frequency + fineOffset) * (1.f / sampleRate);
     
     if (phase < 0.0)
         phase += 1.0;

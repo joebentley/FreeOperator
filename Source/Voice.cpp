@@ -83,7 +83,7 @@ void Voice::noteStarted()
     
     for (int i = 0; i < 4; ++i) {
         osc[i].setFrequency(0);
-        osc[i].setAmplitudeOffset(0);
+        osc[i].setAmplitude(0);
         
         // Coarse setting
         if (!oscFixed[i]->get()) {
@@ -103,9 +103,6 @@ void Voice::noteStarted()
                 }
             }
         }
-        
-        // Add fine setting
-        osc[i].setFrequency(osc[i].getFrequency() + oscFine[i]->get());
         
         // Fine extra modulation (random or sequence)
         juce::String sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Fine";
@@ -127,13 +124,13 @@ void Voice::noteStarted()
         sequenceParameterID = "sequenceOsc" + juce::String(i+1) + "Level";
         if (useSequence) {
             auto levelOffset = getCurrentFromSequence(sequenceParameterID);
-            osc[i].setAmplitudeOffset(levelOffset);
+            osc[i].setAmplitude(levelOffset);
         } else {
             auto levelRange = oscLevelRandom[i]->get();
             if (levelRange > 0.00001) {
                 auto generated = random.nextFloat() * oscLevelRandom[i]->get();
                 setSequenceAtCurrentIndex(sequenceParameterID, generated);
-                osc[i].setAmplitudeOffset(generated);
+                osc[i].setAmplitude(generated);
             } else {
                 setSequenceAtCurrentIndex(sequenceParameterID, 0.0);
             }
@@ -231,7 +228,8 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
     }
     
     for (int i = 0; i < 4; i++) {
-        osc[i].setAmplitude(oscVolume[i]->get());
+        osc[i].setAmplitudeOffset(oscVolume[i]->get());
+        osc[i].setFineOffset(oscFine[i]->get());
         osc[i].setOverdrivePhase(overdrivePhase->get());
     }
     

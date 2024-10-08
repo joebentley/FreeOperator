@@ -18,11 +18,18 @@ public:
     
     void reset() { filter.reset(); }
     void setSampleRate(float sampleRate) { this->sampleRate = sampleRate; }
+    // Use this one to set the noteon frequency
     void setFrequency(float frequency) { this->frequency = frequency; }
-    void setPhaseOffset(float phaseOffset);
+    // Use this one to set the fine offset while note is held down
+    void setFineOffset(float fineOffset) { this->fineOffset = fineOffset; }
+    // Same story
     void setAmplitude(float amplitude) { this->amplitude = amplitude; }
     void setAmplitudeOffset(float offset) { this->amplitudeOffset = offset; }
-    void setOverdrivePhase(bool overdrivePhase) { this->overdrivePhase = overdrivePhase; } // whether or not to use broken old phase accumulation
+    // whether or not to use broken old phase accumulation
+    void setOverdrivePhase(bool overdrivePhase) { this->overdrivePhase = overdrivePhase; }
+    // FM modulation
+    void setPhaseOffset(float phaseOffset);
+    // FM modulation filter
     void setFilterCoefficients(const juce::IIRCoefficients &newCoefficients) { filter.setCoefficients(newCoefficients); }
     
     float getFrequency() { return frequency; }
@@ -34,6 +41,7 @@ private:
     double phase = 0.0;
     float phaseOffset = 0.0;
     float frequency = 440.0;
+    float fineOffset = 0.0;
     float sampleRate = 0.0;
     float amplitude = 1.0;
     float amplitudeOffset = 0.0;
