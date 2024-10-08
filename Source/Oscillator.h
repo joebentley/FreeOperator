@@ -31,7 +31,7 @@ public:
     
 private:
     juce::Array<float> lookupTable;
-    float phase = 0.0;
+    double phase = 0.0;
     float phaseOffset = 0.0;
     float frequency = 440.0;
     float sampleRate = 0.0;

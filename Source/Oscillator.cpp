@@ -22,7 +22,7 @@ Oscillator::Oscillator()
 void Oscillator::setPhaseOffset(float phaseOffset)
 {
     if (!overdrivePhase)
-        phaseOffset *= 4.0;
+        phaseOffset *= 10.0;
     
     // simple lpf
     this->phaseOffset = filter.processSingleSampleRaw(phaseOffset);
@@ -54,6 +54,8 @@ float Oscillator::processSample()
     
     auto progressThrough = tempPhase * 1024.0 - std::floor(tempPhase * 1024.0);
     auto sample = lookupTable[lowerIndex] + progressThrough * (lookupTable[upperIndex] - lookupTable[lowerIndex]);
+    
+//    auto sample = std::sin(6.28318530718f * (phase + phaseOffset));
     
     return juce::jmin(1.0f, amplitudeOffset + amplitude) * sample;
 }
