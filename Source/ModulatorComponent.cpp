@@ -110,50 +110,11 @@ ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
     addAndMakeVisible(timeRandomLabel);
     timeRandomLabel.setText("Rand. Time", juce::dontSendNotification);
     
-    addAndMakeVisible(randomRepeat);
-    randomRepeatAttachment = std::make_unique<ButtonAttachment>(parameters, "randomRepeat", randomRepeat);
-    
-    addAndMakeVisible(randomRepeatLabel);
-    randomRepeatLabel.setText("Repeat Sequence", juce::dontSendNotification);
-    
-    addAndMakeVisible(randomRepeatHold);
-    randomRepeatHold.setButtonText("Overwrite");
-    
-    randomRepeatHold.onStateChange = [&] {
-        auto repeat = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"));
-        auto isOver = randomRepeatHold.isOver();
-        auto isDown = randomRepeatHold.isDown();
-        
-        if (isDown && repeat->get()) {
-            // Prevent infinite loop
-            parameters.removeParameterListener("randomRepeat", this);
-            repeat->beginChangeGesture();
-            repeat->setValueNotifyingHost(0.0);
-            repeat->endChangeGesture();
-            parameters.addParameterListener("randomRepeat", this);
-        } else if (isOver && !isDown && !repeat->get()) {
-            parameters.removeParameterListener("randomRepeat", this);
-            repeat->beginChangeGesture();
-            repeat->setValueNotifyingHost(1.0);
-            repeat->endChangeGesture();
-            parameters.addParameterListener("randomRepeat", this);
-        }
-    };
-    
-    parameters.addParameterListener("randomRepeat", this);
-    randomRepeatHold.setEnabled(dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get());
-    
     addAndMakeVisible(sequencer);
 }
 
 ModulatorGlobal::~ModulatorGlobal()
 {
-    parameters.removeParameterListener("randomRepeat", this);
-}
-
-void ModulatorGlobal::parameterChanged (const juce::String& parameterID, float newValue)
-{
-    randomRepeatHold.setEnabled(dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get());
 }
 
 void ModulatorGlobal::resized()
@@ -168,14 +129,7 @@ void ModulatorGlobal::resized()
     timeRandomLabel.setBounds(controlsRow1Cell1.removeFromTop(20));
     timeRandom.setBounds(controlsRow1Cell1);
     
-    auto controlsRow2 = controlsArea.removeFromTop(110);
-    randomRepeatLabel.setBounds(controlsRow2.removeFromLeft(80));
-    randomRepeat.setBounds(controlsRow2.removeFromLeft(40).withTrimmedLeft(8));
-    
-    controlsRow2.removeFromLeft(20);
-    randomRepeatHold.setBounds(controlsRow2.removeFromLeft(80).withSizeKeepingCentre(80, 30));
-    
-    sequencer.setBounds(controlsArea.removeFromTop(20));
+    sequencer.setBounds(controlsArea.removeFromTop(300));
 }
 
 // ===========================================================================================

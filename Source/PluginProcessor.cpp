@@ -81,23 +81,24 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterBool>(pid("mono", 1),          "Mono",        true),
     std::make_unique<juce::AudioParameterBool>(pid("overdrivePhase", 1),"Overdrive Phase", false),
     std::make_unique<juce::AudioParameterBool>(pid("randomRepeat", 1),  "Repeat Random Sequence", false),
+    std::make_unique<juce::AudioParameterInt>(pid("sequenceLength", 1), "Sequence Length", 1, MAX_SEQUENCE_LENGTH, 8)
 }),
 audioEngine(parameters)
 {
-    float array[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    parameters.state.setProperty("sequenceOsc1Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc1Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc1Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc2Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc3Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4Coarse",  juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4Fine",    juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceOsc4Level",   juce::var(juce::Array<juce::var>(array, 8)), nullptr);
-    parameters.state.setProperty("sequenceTime",        juce::var(juce::Array<juce::var>(array, 8)), nullptr);
+    float array[MAX_SEQUENCE_LENGTH] = {0, 0, 0, 0, 0, 0, 0, 0};
+    parameters.state.setProperty("sequenceOsc1Coarse",  juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc1Fine",    juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc1Level",   juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc2Coarse",  juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc2Fine",    juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc2Level",   juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc3Coarse",  juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc3Fine",    juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc3Level",   juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc4Coarse",  juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc4Fine",    juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceOsc4Level",   juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
+    parameters.state.setProperty("sequenceTime",        juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
     parameters.state.setProperty("sequenceIndex", 0, nullptr);
 }
 

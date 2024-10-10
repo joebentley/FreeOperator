@@ -64,10 +64,9 @@ private:
     ModulatorComponent mod4;
 };
 
-class ModulatorGlobal : public juce::Component, juce::AudioProcessorValueTreeState::Listener
+class ModulatorGlobal : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters);
     ~ModulatorGlobal();
@@ -75,8 +74,6 @@ public:
     void resized() override;
 private:
     juce::AudioProcessorValueTreeState &parameters;
-    
-    void parameterChanged (const juce::String& parameterID, float newValue) override;
     
     static constexpr int rotaryBoxWidth = 70;
     static constexpr int rotaryBoxHeight = 20;
@@ -86,13 +83,7 @@ private:
     juce::Slider timeRandom;
     std::unique_ptr<SliderAttachment> timeRandomAttachment;
     juce::Label timeRandomLabel;
-    
-    juce::ToggleButton randomRepeat;
-    std::unique_ptr<ButtonAttachment> randomRepeatAttachment;
-    juce::Label randomRepeatLabel;
-    
-    juce::TextButton randomRepeatHold;
-    
+
     SequencerComponent sequencer;
 };
 

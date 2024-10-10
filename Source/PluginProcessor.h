@@ -56,8 +56,8 @@ public:
     
     juce::MidiMessageCollector& getMidiMessageCollector() noexcept { return midiMessageCollector; }
     
+    static constexpr int MAX_SEQUENCE_LENGTH = 16;
 private:
-    //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FMsynthAudioProcessor)
     
     juce::MidiMessageCollector midiMessageCollector;

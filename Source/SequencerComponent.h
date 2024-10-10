@@ -35,13 +35,12 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LEDComponent)
 };
 
-
-class SequencerComponent  : public juce::Component, public juce::ValueTree::Listener,
+class SequencerLEDsComponent  : public juce::Component, public juce::ValueTree::Listener,
 public juce::AudioProcessorValueTreeState::Listener, public juce::AsyncUpdater
 {
 public:
-    SequencerComponent(juce::AudioProcessorValueTreeState &parameters);
-    ~SequencerComponent() override;
+    SequencerLEDsComponent(juce::AudioProcessorValueTreeState &parameters);
+    ~SequencerLEDsComponent() override;
     
     void valueTreePropertyChanged (juce::ValueTree& treeWhosePropertyHasChanged,
                                    const juce::Identifier& property) override;
@@ -51,10 +50,39 @@ public:
     void resized() override;
 
 private:
+    
     void handleAsyncUpdate() override;
     
     LEDComponent leds[8];
     
     juce::AudioProcessorValueTreeState &parameters;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SequencerLEDsComponent)
+};
+
+class SequencerComponent : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
+{
+using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+public:
+    SequencerComponent(juce::AudioProcessorValueTreeState &parameters);
+    ~SequencerComponent() override;
+    
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    void resized() override;
+private:
+    juce::AudioProcessorValueTreeState &parameters;
+    
+    
+    juce::ToggleButton randomRepeat;
+    std::unique_ptr<ButtonAttachment> randomRepeatAttachment;
+    juce::Label randomRepeatLabel;
+    
+    juce::TextButton randomRepeatHold;
+    
+    juce::Slider sequenceLength;
+    std::unique_ptr<SliderAttachment> sequenceLengthAttachment;
+    juce::Label sequenceLengthLabel;
+    
+    SequencerLEDsComponent sequencerLEDs;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SequencerComponent)
 };
