@@ -1,6 +1,6 @@
 # FreeOperator
 
-FM synthesiser in JUCE using C++. Binaries will be available when the software is at a more advanced stage!
+FM synthesiser in JUCE using C++. No binaries yet
 
 Uniquely the synth has built in randomisation of every FM parameter, and even allows a user to capture a random sequence in order to repeat, which is very useful for techno as shown in the following video:
 
