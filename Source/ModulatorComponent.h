@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SequencerComponent.h"
 
 //==============================================================================
 /*
@@ -73,6 +74,8 @@ public:
     
     void resized() override;
 private:
+    juce::AudioProcessorValueTreeState &parameters;
+    
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     
     static constexpr int rotaryBoxWidth = 70;
@@ -90,7 +93,7 @@ private:
     
     juce::TextButton randomRepeatHold;
     
-    juce::AudioProcessorValueTreeState &parameters;
+    SequencerComponent sequencer;
 };
 
 class ModulatorTab : public juce::Component

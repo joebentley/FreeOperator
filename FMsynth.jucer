@@ -5,6 +5,10 @@
               pluginAUMainType="'augn'">
   <MAINGROUP id="jjzn8P" name="FMsynth">
     <GROUP id="{5AA00DEB-E993-A848-8489-F660856A8DB0}" name="Source">
+      <FILE id="XmgQfs" name="SequencerComponent.cpp" compile="1" resource="0"
+            file="Source/SequencerComponent.cpp"/>
+      <FILE id="Aiz11J" name="SequencerComponent.h" compile="0" resource="0"
+            file="Source/SequencerComponent.h"/>
       <FILE id="ohytvQ" name="ModulatorComponent.cpp" compile="1" resource="0"
             file="Source/ModulatorComponent.cpp"/>
       <FILE id="vPpQ1u" name="ModulatorComponent.h" compile="0" resource="0"

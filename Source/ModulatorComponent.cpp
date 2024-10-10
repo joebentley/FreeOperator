@@ -93,7 +93,9 @@ void ModulatorComponents::resized()
     mod1.setBounds(area.removeFromTop(90));
 }
 
-ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters) : parameters(parameters)
+// ===========================================================================================
+
+ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters) : parameters(parameters), sequencer(parameters)
 {
     addAndMakeVisible(globalLabel);
     globalLabel.setText("Global", juce::dontSendNotification);
@@ -125,17 +127,23 @@ ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
         if (isDown && repeat->get()) {
             // Prevent infinite loop
             parameters.removeParameterListener("randomRepeat", this);
+            repeat->beginChangeGesture();
             repeat->setValueNotifyingHost(0.0);
+            repeat->endChangeGesture();
             parameters.addParameterListener("randomRepeat", this);
         } else if (isOver && !isDown && !repeat->get()) {
             parameters.removeParameterListener("randomRepeat", this);
+            repeat->beginChangeGesture();
             repeat->setValueNotifyingHost(1.0);
+            repeat->endChangeGesture();
             parameters.addParameterListener("randomRepeat", this);
         }
     };
     
     parameters.addParameterListener("randomRepeat", this);
     randomRepeatHold.setEnabled(dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get());
+    
+    addAndMakeVisible(sequencer);
 }
 
 ModulatorGlobal::~ModulatorGlobal()
@@ -153,7 +161,7 @@ void ModulatorGlobal::resized()
     auto area = getLocalBounds();
     globalLabel.setBounds(area.removeFromTop(80));
     
-    auto controlsArea = area.removeFromTop(200);
+    auto controlsArea = area.removeFromTop(400);
     
     auto controlsRow1 = controlsArea.removeFromTop(110);
     auto controlsRow1Cell1 = controlsRow1.removeFromLeft(rotaryWidth);
@@ -166,7 +174,11 @@ void ModulatorGlobal::resized()
     
     controlsRow2.removeFromLeft(20);
     randomRepeatHold.setBounds(controlsRow2.removeFromLeft(80).withSizeKeepingCentre(80, 30));
+    
+    sequencer.setBounds(controlsArea.removeFromTop(20));
 }
+
+// ===========================================================================================
 
 void ModulatorTab::resized()
 {
