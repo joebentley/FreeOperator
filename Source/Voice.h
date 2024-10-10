@@ -64,5 +64,5 @@ private:
     
     juce::Random random;
     
-    double sampleRate;
+    double sampleRate = 0.0;
 };

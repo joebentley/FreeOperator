@@ -211,9 +211,11 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
     else if (parameterID == "algorithm")
         algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
     else if (parameterID == "tone") {
-        auto filterCoefficients = juce::IIRCoefficients::makeLowPass(sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
-        for (int i = 0; i < 4; ++i)
-            osc[i].setFilterCoefficients(filterCoefficients);
+        if (sampleRate > 0.0) {
+            auto filterCoefficients = juce::IIRCoefficients::makeLowPass(sampleRate, dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("tone"))->get());
+            for (int i = 0; i < 4; ++i)
+                osc[i].setFilterCoefficients(filterCoefficients);
+        }
     }
 }
 

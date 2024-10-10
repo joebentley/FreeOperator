@@ -113,6 +113,39 @@ ModulatorGlobal::ModulatorGlobal(juce::AudioProcessorValueTreeState &parameters)
     
     addAndMakeVisible(randomRepeatLabel);
     randomRepeatLabel.setText("Repeat Sequence", juce::dontSendNotification);
+    
+    addAndMakeVisible(randomRepeatHold);
+    randomRepeatHold.setButtonText("Overwrite");
+    
+    randomRepeatHold.onStateChange = [&] {
+        auto repeat = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"));
+        auto isOver = randomRepeatHold.isOver();
+        auto isDown = randomRepeatHold.isDown();
+        
+        if (isDown && repeat->get()) {
+            // Prevent infinite loop
+            parameters.removeParameterListener("randomRepeat", this);
+            repeat->setValueNotifyingHost(0.0);
+            parameters.addParameterListener("randomRepeat", this);
+        } else if (isOver && !isDown && !repeat->get()) {
+            parameters.removeParameterListener("randomRepeat", this);
+            repeat->setValueNotifyingHost(1.0);
+            parameters.addParameterListener("randomRepeat", this);
+        }
+    };
+    
+    parameters.addParameterListener("randomRepeat", this);
+    randomRepeatHold.setEnabled(dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get());
+}
+
+ModulatorGlobal::~ModulatorGlobal()
+{
+    parameters.removeParameterListener("randomRepeat", this);
+}
+
+void ModulatorGlobal::parameterChanged (const juce::String& parameterID, float newValue)
+{
+    randomRepeatHold.setEnabled(dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("randomRepeat"))->get());
 }
 
 void ModulatorGlobal::resized()
@@ -122,15 +155,17 @@ void ModulatorGlobal::resized()
     
     auto controlsArea = area.removeFromTop(200);
     
-    auto rotaryRow1 = controlsArea.removeFromTop(110);
-    auto rotaryRow1Cell1 = rotaryRow1.removeFromLeft(rotaryWidth);
-    timeRandomLabel.setBounds(rotaryRow1Cell1.removeFromTop(20));
-    timeRandom.setBounds(rotaryRow1Cell1);
+    auto controlsRow1 = controlsArea.removeFromTop(110);
+    auto controlsRow1Cell1 = controlsRow1.removeFromLeft(rotaryWidth);
+    timeRandomLabel.setBounds(controlsRow1Cell1.removeFromTop(20));
+    timeRandom.setBounds(controlsRow1Cell1);
     
-    auto rotaryRow2 = controlsArea.removeFromTop(110);
-    auto rotaryRow2Cell1 = rotaryRow2.removeFromLeft(200);
-    randomRepeatLabel.setBounds(rotaryRow2Cell1.removeFromLeft(80));
-    randomRepeat.setBounds(rotaryRow2Cell1.removeFromLeft(40).withTrimmedLeft(8));
+    auto controlsRow2 = controlsArea.removeFromTop(110);
+    randomRepeatLabel.setBounds(controlsRow2.removeFromLeft(80));
+    randomRepeat.setBounds(controlsRow2.removeFromLeft(40).withTrimmedLeft(8));
+    
+    controlsRow2.removeFromLeft(20);
+    randomRepeatHold.setBounds(controlsRow2.removeFromLeft(80).withSizeKeepingCentre(80, 30));
 }
 
 void ModulatorTab::resized()
@@ -138,5 +173,5 @@ void ModulatorTab::resized()
     auto area = getLocalBounds();
     mods.setBounds(area.removeFromLeft(300));
     area.removeFromLeft(50);
-    globalMod.setBounds(area.removeFromLeft(200));
+    globalMod.setBounds(area.removeFromLeft(300));
 }
