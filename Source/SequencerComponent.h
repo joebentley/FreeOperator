@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Constants.h"
 
 //==============================================================================
 /*
@@ -27,10 +28,12 @@ public:
 
     void setIsOn(bool isOn) { this->isOn = isOn; }
     void setIsRecording(bool isRecording) { this->isRecording = isRecording; }
+    void setIsEnabled(bool isEnabled) { this->isEnabled = isEnabled; }
     
 private:
     bool isOn = false;
     bool isRecording = true;
+    bool isEnabled = true;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LEDComponent)
 };
@@ -52,8 +55,9 @@ public:
 private:
     
     void handleAsyncUpdate() override;
+    void updateSequenceLength();
     
-    LEDComponent leds[8];
+    LEDComponent leds[MAX_SEQUENCE_LENGTH];
     
     juce::AudioProcessorValueTreeState &parameters;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SequencerLEDsComponent)

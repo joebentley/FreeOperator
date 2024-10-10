@@ -39,11 +39,11 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     }
     
     timeRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("timeRandom"));
+    overdrivePhase = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("overdrivePhase"));
+    sequenceLength = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("sequenceLength"));
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
-    
-    overdrivePhase = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("overdrivePhase"));
 }
 
 Voice::~Voice()
@@ -455,5 +455,5 @@ float Voice::getCurrentFromSequence(const juce::String& parameterID)
 void Voice::incrementSequenceIndex()
 {
     int index = parameters.state.getProperty("sequenceIndex");
-    parameters.state.setProperty("sequenceIndex", (index + 1) % 8, nullptr);
+    parameters.state.setProperty("sequenceIndex", (index + 1) % sequenceLength->get(), nullptr);
 }

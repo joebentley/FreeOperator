@@ -85,7 +85,10 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
 }),
 audioEngine(parameters)
 {
-    float array[MAX_SEQUENCE_LENGTH] = {0, 0, 0, 0, 0, 0, 0, 0};
+    float array[MAX_SEQUENCE_LENGTH];
+    for (int i = 0; i < MAX_SEQUENCE_LENGTH; ++i) {
+        array[i] = 0;
+    }
     parameters.state.setProperty("sequenceOsc1Coarse",  juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
     parameters.state.setProperty("sequenceOsc1Fine",    juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);
     parameters.state.setProperty("sequenceOsc1Level",   juce::var(juce::Array<juce::var>(array, MAX_SEQUENCE_LENGTH)), nullptr);

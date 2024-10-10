@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "AudioEngine.h"
+#include "Constants.h"
 
 //==============================================================================
 /**
@@ -55,8 +56,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     juce::MidiMessageCollector& getMidiMessageCollector() noexcept { return midiMessageCollector; }
-    
-    static constexpr int MAX_SEQUENCE_LENGTH = 16;
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FMsynthAudioProcessor)
     
