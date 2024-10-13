@@ -37,6 +37,8 @@ public:
     
     float processSample();
     
+    void setWaveform(Waveform waveform);
+    
 private:
     juce::Array<float> lookupTable;
     double phase = 0.0;

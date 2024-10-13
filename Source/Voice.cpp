@@ -24,6 +24,7 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
         parameters.addParameterListener("osc" + juce::String(i+1) + "Decay", this);
         parameters.addParameterListener("osc" + juce::String(i+1) + "Sustain", this);
         parameters.addParameterListener("osc" + juce::String(i+1) + "Release", this);
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Waveform", this);
     }
     
     parameters.addParameterListener("tone", this);
@@ -36,6 +37,8 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
         oscCoarseRandom[i] = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc" + juce::String(i+1) + "CoarseRandom"));
         oscFineRandom[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "FineRandom"));
         oscLevelRandom[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "LevelRandom"));
+        oscWaveform[i] = dynamic_cast<juce::AudioParameterChoice*>(parameters.getParameter("osc" + juce::String(i+1) + "Waveform"));
+        osc[i].setWaveform(waveformFromString(oscWaveform[i]->getCurrentChoiceName()));
     }
     
     timeRandom = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("timeRandom"));
@@ -53,6 +56,7 @@ Voice::~Voice()
         parameters.removeParameterListener("osc" + juce::String(i+1) + "Decay", this);
         parameters.removeParameterListener("osc" + juce::String(i+1) + "Sustain", this);
         parameters.removeParameterListener("osc" + juce::String(i+1) + "Release", this);
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Waveform", this);
     }
     
     parameters.removeParameterListener("algorithm", this);
@@ -184,6 +188,8 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
         adsrParameters[0].sustain = newValue;
     else if (parameterID == "osc1Release")
         adsrParameters[0].release = newValue;
+    else if (parameterID == "osc1Waveform")
+        osc[0].setWaveform(waveformFromString(oscWaveform[0]->getCurrentChoiceName()));
     else if (parameterID == "osc2Attack")
         adsrParameters[1].attack = newValue;
     else if (parameterID == "osc2Decay")
@@ -192,6 +198,8 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
         adsrParameters[1].sustain = newValue;
     else if (parameterID == "osc2Release")
         adsrParameters[1].release = newValue;
+    else if (parameterID == "osc2Waveform")
+        osc[1].setWaveform(waveformFromString(oscWaveform[1]->getCurrentChoiceName()));
     else if (parameterID == "osc3Attack")
         adsrParameters[2].attack = newValue;
     else if (parameterID == "osc3Decay")
@@ -200,6 +208,8 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
         adsrParameters[2].sustain = newValue;
     else if (parameterID == "osc3Release")
         adsrParameters[2].release = newValue;
+    else if (parameterID == "osc3Waveform")
+        osc[2].setWaveform(waveformFromString(oscWaveform[2]->getCurrentChoiceName()));
     else if (parameterID == "osc4Attack")
         adsrParameters[3].attack = newValue;
     else if (parameterID == "osc4Decay")
@@ -208,6 +218,8 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
         adsrParameters[3].sustain = newValue;
     else if (parameterID == "osc4Release")
         adsrParameters[3].release = newValue;
+    else if (parameterID == "osc4Waveform")
+        osc[3].setWaveform(waveformFromString(oscWaveform[3]->getCurrentChoiceName()));
     else if (parameterID == "algorithm")
         algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
     else if (parameterID == "tone") {

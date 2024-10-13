@@ -53,6 +53,8 @@ private:
     juce::AudioParameterFloat   *oscFineRandom[4];
     juce::AudioParameterFloat   *oscLevelRandom[4];
     
+    juce::AudioParameterChoice  *oscWaveform[4];
+    
     juce::AudioParameterFloat   *timeRandom;
     juce::AudioParameterBool    *overdrivePhase;
     juce::AudioParameterInt     *sequenceLength;

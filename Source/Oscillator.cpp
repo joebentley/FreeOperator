@@ -12,10 +12,23 @@
 
 Oscillator::Oscillator()
 {
+    setWaveform(Waveform::Sine);
+}
+
+void Oscillator::setWaveform(Waveform waveform)
+{
     lookupTable.clear();
     for (int i = 0; i < WAVETABLE_SIZE; ++i) {
-        float phase = (float)i / (float)WAVETABLE_SIZE * juce::MathConstants<float>::twoPi;
-        lookupTable.add(std::sin(phase));
+        float phase = (float)i / (float)WAVETABLE_SIZE;
+        switch (waveform) {
+            case Waveform::Sine:
+                lookupTable.add(std::sin(phase * juce::MathConstants<float>::twoPi));
+                break;
+            case Waveform::Saw:
+                lookupTable.add(phase);
+                break;
+        }
+        
     }
 }
 
