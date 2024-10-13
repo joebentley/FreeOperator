@@ -60,6 +60,12 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
     oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
     oscNumLabel.setFont(juce::FontOptions(20));
     
+    // Have to manually populate ComboBoxs
+    waveform.addItemList(parameters.getParameter(parameterPrefix + "Waveform")->getAllValueStrings(), 1);
+    waveformAttachment = std::make_unique<ComboBoxAttachment>(parameters, parameterPrefix + "Waveform", waveform);
+    addAndMakeVisible(waveform);
+    waveform.setLookAndFeel(&myLookAndFeel);
+    
     if (oscNumber == 4) {
         addAndMakeVisible(attackLabel);
         addAndMakeVisible(decayLabel);
@@ -104,7 +110,7 @@ void OscComponent::resized()
     
     if (oscNumber == 4) {
         auto labelArea = area.removeFromTop(40);
-        labelArea.removeFromLeft(50);
+        labelArea.removeFromLeft(50 /* oscNumLabel */ + 60 /* waveform */);
         attackLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         decayLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
         sustainLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
@@ -115,7 +121,8 @@ void OscComponent::resized()
         volumeLabel.setBounds(labelArea.removeFromLeft(rotaryWidth));
     }
     
-    oscNumLabel.setBounds(area.removeFromLeft(50).withTrimmedLeft(18).withTrimmedBottom(30));
+    oscNumLabel.setBounds(area.removeFromLeft(50).withTrimmedLeft(18).withTrimmedBottom(25));
+    waveform.setBounds(area.removeFromLeft(60).withTrimmedRight(10).withTrimmedBottom(25).withSizeKeepingCentre(50, 20));
     attack.setBounds(area.removeFromLeft(rotaryWidth));
     decay.setBounds(area.removeFromLeft(rotaryWidth));
     sustain.setBounds(area.removeFromLeft(rotaryWidth));

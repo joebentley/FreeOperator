@@ -12,3 +12,4 @@
 
 
 static constexpr int MAX_SEQUENCE_LENGTH = 16;
+static constexpr int WAVETABLE_SIZE = 256;

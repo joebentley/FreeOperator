@@ -5,6 +5,9 @@
               pluginAUMainType="'augn'">
   <MAINGROUP id="jjzn8P" name="FMsynth">
     <GROUP id="{5AA00DEB-E993-A848-8489-F660856A8DB0}" name="Source">
+      <FILE id="O162m5" name="MyLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/MyLookAndFeel.cpp"/>
+      <FILE id="Mkcoah" name="MyLookAndFeel.h" compile="0" resource="0" file="Source/MyLookAndFeel.h"/>
       <FILE id="vlEuQ1" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
       <FILE id="XmgQfs" name="SequencerComponent.cpp" compile="1" resource="0"
             file="Source/SequencerComponent.cpp"/>

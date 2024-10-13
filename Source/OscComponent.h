@@ -11,11 +11,13 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "MyLookAndFeel.h"
 
 class OscComponent  : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
 public:
     OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber);
     ~OscComponent() override;
@@ -31,6 +33,9 @@ private:
     
     int oscNumber;
     
+    juce::ComboBox waveform;
+    std::unique_ptr<ComboBoxAttachment> waveformAttachment;
+    
     juce::Slider attack, decay, sustain, release, coarse, fine, volume;
     juce::ToggleButton fixed;
     juce::Label oscNumLabel, attackLabel, decayLabel, sustainLabel, releaseLabel, coarseLabel, fineLabel, fixedLabel, volumeLabel;
@@ -41,6 +46,8 @@ private:
     
     juce::AudioParameterBool* fixedParameter;
     juce::AudioProcessorValueTreeState &parameters;
+    
+    MyLookAndFeel myLookAndFeel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };
