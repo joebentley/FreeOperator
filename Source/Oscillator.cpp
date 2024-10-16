@@ -43,10 +43,16 @@ void Oscillator::setPhaseOffset(float phaseOffset)
 
 float Oscillator::processSample()
 {
+    auto totalFreq = frequency + fineOffset;
+    
+    if (std::fabs(semitoneOffset) > 0.000001f) {
+        totalFreq *= std::powf(2, semitoneOffset / 12.0f);
+    }
+    
     if (overdrivePhase)
-        phase += (frequency + fineOffset) * (1.f / sampleRate) + phaseOffset;
+        phase += totalFreq * (1.f / sampleRate) + phaseOffset;
     else
-        phase += (frequency + fineOffset) * (1.f / sampleRate);
+        phase += totalFreq * (1.f / sampleRate);
     
     if (phase < 0.0)
         phase += 1.0;

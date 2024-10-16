@@ -47,6 +47,11 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     
     parameters.addParameterListener("algorithm", this);
     algorithm = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("algorithm"))->get();
+    
+    pitchSemitone = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("pitchSemitone"));
+    pitchDecay = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("pitchDecay"));
+    pitchAmount = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("pitchAmount"));
+    adsrPitch.setParameters(juce::ADSR::Parameters(0.0, 10.0, 0.0, 0.0));
 }
 
 Voice::~Voice()
@@ -73,6 +78,8 @@ void Voice::prepare(const juce::dsp::ProcessSpec& spec)
         osc[i].setFilterCoefficients(filterCoefficients);
         osc[i].reset();
     }
+    
+    adsrPitch.setSampleRate(spec.sampleRate);
     
     tempBuffer.setSize(spec.numChannels, spec.maximumBlockSize);
     
@@ -166,8 +173,14 @@ void Voice::noteStarted()
     for (int i = 0; i < 4; ++i)
         adsrOsc[i].setParameters(adsrParametersCopy[i]);
     
+    auto parameters = adsrPitch.getParameters();
+    parameters.decay = pitchDecay->get();
+    adsrPitch.setParameters(parameters);
+    
     for (int i = 0; i < 4; ++i)
         adsrOsc[i].noteOn();
+    
+    adsrPitch.noteOn();
     
     incrementSequenceIndex();
 }
@@ -176,6 +189,8 @@ void Voice::noteStopped(bool)
 {
     for (int i = 0; i < 4; ++i)
         adsrOsc[i].noteOff();
+    
+    adsrPitch.noteOff();
 }
 
 void Voice::parameterChanged (const juce::String& parameterID, float newValue)
@@ -234,9 +249,13 @@ void Voice::parameterChanged (const juce::String& parameterID, float newValue)
 void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
     if (isActive() && adsrOsc[0].isActive() == false) {
-//        DBG("Main ADSR end");
         for (int i = 0; i < 4; ++i)
             adsrOsc[i].setParameters(adsrParameters[i]);
+        
+        auto parameters = adsrPitch.getParameters();
+        parameters.decay = pitchDecay->get();
+        adsrPitch.setParameters(parameters);
+        
         clearCurrentNote();
         return;
     }
@@ -251,6 +270,7 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
     audioBlock.clear();
     
     for (int s = 0; s < numSamples; ++s) {
+        osc[0].setSemitoneOffset(pitchSemitone->get() * pitchAmount->get() * adsrPitch.getNextSample());
         auto sample = renderSampleForAlgorithm();
         audioBlock.setSample(0, s, sample);
         audioBlock.setSample(1, s, sample);

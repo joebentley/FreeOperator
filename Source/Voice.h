@@ -62,6 +62,11 @@ private:
     juce::ADSR adsrOsc[4];
     juce::ADSR::Parameters adsrParameters[4];
     
+    juce::ADSR adsrPitch;
+    juce::AudioParameterInt     *pitchSemitone;
+    juce::AudioParameterFloat   *pitchDecay;
+    juce::AudioParameterFloat   *pitchAmount;
+    
     juce::AudioProcessorValueTreeState &parameters;
     
     juce::Random random;
