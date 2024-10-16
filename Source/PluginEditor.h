@@ -40,7 +40,8 @@ private:
 
     juce::TabbedComponent tabs { juce::TabbedButtonBar::Orientation::TabsAtTop };
     OscComponents oscs;
-    ModulatorTab modTab;
+    ModulatorTab1 modTab1;
+    ModulatorTab2 modTab2;
     
     juce::Slider algorithm;
     std::unique_ptr<SliderAttachment> algorithmAttachment;

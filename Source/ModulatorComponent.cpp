@@ -134,10 +134,71 @@ void ModulatorGlobal::resized()
 
 // ===========================================================================================
 
-void ModulatorTab::resized()
+void ModulatorTab1::resized()
 {
     auto area = getLocalBounds();
     mods.setBounds(area.removeFromLeft(300));
     area.removeFromLeft(50);
     globalMod.setBounds(area.removeFromLeft(300));
+}
+
+//================================ Tab 2 =======================================
+
+ModulatorPitch::ModulatorPitch(juce::AudioProcessorValueTreeState &parameters) : parameters(parameters)
+{
+    addAndMakeVisible(offset);
+    offset.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    offset.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    offsetAttachment = std::make_unique<SliderAttachment>(parameters, "pitchSemitone", offset);
+    
+    addAndMakeVisible(offsetLabel);
+    offsetLabel.setText("Offset", juce::dontSendNotification);
+    offsetLabel.setJustificationType(juce::Justification::centred);
+    
+    addAndMakeVisible(decay);
+    decay.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    decay.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    decayAttachment = std::make_unique<SliderAttachment>(parameters, "pitchDecay", decay);
+    
+    addAndMakeVisible(decayLabel);
+    decayLabel.setText("Decay", juce::dontSendNotification);
+    decayLabel.setJustificationType(juce::Justification::centred);
+    
+    addAndMakeVisible(amount);
+    amount.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    amount.setTextBoxStyle(juce::Slider::TextBoxBelow, false, rotaryBoxWidth, rotaryBoxHeight);
+    amountAttachment = std::make_unique<SliderAttachment>(parameters, "pitchAmount", amount);
+    
+    addAndMakeVisible(amountLabel);
+    amountLabel.setText("Amount", juce::dontSendNotification);
+    amountLabel.setJustificationType(juce::Justification::centred);
+}
+
+ModulatorPitch::~ModulatorPitch()
+{
+}
+
+void ModulatorPitch::resized()
+{
+    auto area = getLocalBounds();
+    
+    auto controlsRow = area.removeFromTop(110);
+    controlsRow.removeFromLeft(50);
+    auto offsetArea = controlsRow.removeFromLeft(rotaryWidth);
+    offsetLabel.setBounds(offsetArea.removeFromTop(20));
+    offset.setBounds(offsetArea);
+    
+    auto decayArea = controlsRow.removeFromLeft(rotaryWidth);
+    decayLabel.setBounds(decayArea.removeFromTop(20));
+    decay.setBounds(decayArea);
+    
+    auto amountArea = controlsRow.removeFromLeft(rotaryWidth);
+    amountLabel.setBounds(amountArea.removeFromTop(20));
+    amount.setBounds(amountArea);
+}
+
+void ModulatorTab2::resized()
+{
+    auto area = getLocalBounds();
+    pitch.setBounds(area.removeFromLeft(300));
 }

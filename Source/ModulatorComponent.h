@@ -13,9 +13,7 @@
 #include <JuceHeader.h>
 #include "SequencerComponent.h"
 
-//==============================================================================
-/*
-*/
+//================================ Tab 1 =======================================
 class ModulatorComponent  : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -87,10 +85,10 @@ private:
     SequencerComponent sequencer;
 };
 
-class ModulatorTab : public juce::Component
+class ModulatorTab1 : public juce::Component
 {
 public:
-    ModulatorTab(juce::AudioProcessorValueTreeState &parameters) : mods(parameters), globalMod(parameters)
+    ModulatorTab1(juce::AudioProcessorValueTreeState &parameters) : mods(parameters), globalMod(parameters)
     {
         addAndMakeVisible(mods);
         addAndMakeVisible(globalMod);
@@ -100,4 +98,38 @@ public:
 private:
     ModulatorComponents mods;
     ModulatorGlobal globalMod;
+};
+
+//================================ Tab 2 =======================================
+class ModulatorPitch : public juce::Component
+{
+using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+public:
+    ModulatorPitch(juce::AudioProcessorValueTreeState &parameters);
+    ~ModulatorPitch();
+    
+    void resized() override;
+private:
+    juce::AudioProcessorValueTreeState &parameters;
+    
+    static constexpr int rotaryBoxWidth = 70;
+    static constexpr int rotaryBoxHeight = 20;
+    static constexpr int rotaryWidth = 80;
+    
+    juce::Slider offset, decay, amount;
+    std::unique_ptr<SliderAttachment> offsetAttachment, decayAttachment, amountAttachment;
+    juce::Label offsetLabel, decayLabel, amountLabel;
+};
+
+class ModulatorTab2 : public juce::Component
+{
+public:
+    ModulatorTab2(juce::AudioProcessorValueTreeState &parameters) : pitch(parameters)
+    {
+        addAndMakeVisible(pitch);
+    }
+    
+    void resized() override;
+private:
+    ModulatorPitch pitch;
 };
