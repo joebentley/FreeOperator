@@ -90,6 +90,10 @@ parameters(*this, nullptr, juce::Identifier("FMSynth"), {
     std::make_unique<juce::AudioParameterInt>(pid("pitchSemitone", 1),  "Semitone Pitch Offset", -36, 36, 0),
     std::make_unique<juce::AudioParameterFloat>(pid("pitchDecay", 1),   "Pitch Decay", nrf(0.0f, 10.0f, 0.00001f, 0.27f), 0.0f),
     std::make_unique<juce::AudioParameterFloat>(pid("pitchAmount", 1),  "Pitch Env. Amount", 0.0f, 1.0f, 0.0f),
+    std::make_unique<juce::AudioParameterBool>(pid("pitchOsc1", 1), "Pitch Enable Osc 1", true),
+    std::make_unique<juce::AudioParameterBool>(pid("pitchOsc2", 1), "Pitch Enable Osc 2", false),
+    std::make_unique<juce::AudioParameterBool>(pid("pitchOsc3", 1), "Pitch Enable Osc 3", false),
+    std::make_unique<juce::AudioParameterBool>(pid("pitchOsc4", 1), "Pitch Enable Osc 4", false),
 }),
 audioEngine(parameters)
 {

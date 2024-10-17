@@ -104,6 +104,7 @@ private:
 class ModulatorPitch : public juce::Component
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
 public:
     ModulatorPitch(juce::AudioProcessorValueTreeState &parameters);
     ~ModulatorPitch();
@@ -119,6 +120,10 @@ private:
     juce::Slider offset, decay, amount;
     std::unique_ptr<SliderAttachment> offsetAttachment, decayAttachment, amountAttachment;
     juce::Label offsetLabel, decayLabel, amountLabel;
+    
+    juce::ToggleButton oscs[4];
+    std::unique_ptr<ButtonAttachment> oscAttachments[4];
+    juce::Label oscLabels[4];
 };
 
 class ModulatorTab2 : public juce::Component

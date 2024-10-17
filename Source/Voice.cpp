@@ -29,7 +29,7 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     
     parameters.addParameterListener("tone", this);
     
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
         oscVolume[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "Volume"));
         oscCoarse[i] = dynamic_cast<juce::AudioParameterInt*>(parameters.getParameter("osc" + juce::String(i+1) + "Coarse"));
         oscFine[i] = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("osc" + juce::String(i+1) + "Fine"));
@@ -52,6 +52,10 @@ Voice::Voice(juce::AudioProcessorValueTreeState &parametersToUse) : parameters(p
     pitchDecay = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("pitchDecay"));
     pitchAmount = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("pitchAmount"));
     adsrPitch.setParameters(juce::ADSR::Parameters(0.0, 10.0, 0.0, 0.0));
+    
+    for (int i = 0; i < 4; ++i) {
+        pitchOscs[i] = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("pitchOsc" + juce::String(i+1)));
+    }
 }
 
 Voice::~Voice()
@@ -269,8 +273,15 @@ void Voice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSam
     auto audioBlock = juce::dsp::AudioBlock<float>(tempBuffer).getSubBlock(startSample, numSamples);
     audioBlock.clear();
     
+    bool pitchOscsOns[4];
+    for (int i = 0; i < 4; ++i)
+        pitchOscsOns[i] = pitchOscs[i]->get();
+    
     for (int s = 0; s < numSamples; ++s) {
-        osc[0].setSemitoneOffset(pitchSemitone->get() * pitchAmount->get() * adsrPitch.getNextSample());
+        for (int i = 0; i < 4; ++i) {
+            if (pitchOscsOns[i])
+                osc[i].setSemitoneOffset(pitchSemitone->get() * pitchAmount->get() * adsrPitch.getNextSample());
+        }
         auto sample = renderSampleForAlgorithm();
         audioBlock.setSample(0, s, sample);
         audioBlock.setSample(1, s, sample);

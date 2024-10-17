@@ -66,6 +66,7 @@ private:
     juce::AudioParameterInt     *pitchSemitone;
     juce::AudioParameterFloat   *pitchDecay;
     juce::AudioParameterFloat   *pitchAmount;
+    juce::AudioParameterBool    *pitchOscs[4];
     
     juce::AudioProcessorValueTreeState &parameters;
     

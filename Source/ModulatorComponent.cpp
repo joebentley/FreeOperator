@@ -172,6 +172,14 @@ ModulatorPitch::ModulatorPitch(juce::AudioProcessorValueTreeState &parameters) :
     addAndMakeVisible(amountLabel);
     amountLabel.setText("Amount", juce::dontSendNotification);
     amountLabel.setJustificationType(juce::Justification::centred);
+    
+    for (int i = 0; i < 4; ++i) {
+        addAndMakeVisible(oscs[i]);
+        oscAttachments[i] = std::make_unique<ButtonAttachment>(parameters, "pitchOsc" + juce::String(i+1), oscs[i]);
+        addAndMakeVisible(oscLabels[i]);
+        oscLabels[i].setText(juce::String(i+1), juce::dontSendNotification);
+//        oscLabels[i].setJustificationType(juce::Justification::centred);
+    }
 }
 
 ModulatorPitch::~ModulatorPitch()
@@ -181,9 +189,10 @@ ModulatorPitch::~ModulatorPitch()
 void ModulatorPitch::resized()
 {
     auto area = getLocalBounds();
+    area.removeFromTop(20);
     
     auto controlsRow = area.removeFromTop(110);
-    controlsRow.removeFromLeft(50);
+    controlsRow.removeFromLeft(40);
     auto offsetArea = controlsRow.removeFromLeft(rotaryWidth);
     offsetLabel.setBounds(offsetArea.removeFromTop(20));
     offset.setBounds(offsetArea);
@@ -195,10 +204,18 @@ void ModulatorPitch::resized()
     auto amountArea = controlsRow.removeFromLeft(rotaryWidth);
     amountLabel.setBounds(amountArea.removeFromTop(20));
     amount.setBounds(amountArea);
+    
+    controlsRow.removeFromLeft(30);
+    
+    for (int i = 0; i < 4; ++i) {
+        auto buttonArea = controlsRow.removeFromLeft(35).withTrimmedTop(40);
+        oscLabels[i].setBounds(buttonArea.removeFromTop(20).withTrimmedLeft(3));
+        oscs[i].setBounds(buttonArea.removeFromTop(20));
+    }
 }
 
 void ModulatorTab2::resized()
 {
     auto area = getLocalBounds();
-    pitch.setBounds(area.removeFromLeft(300));
+    pitch.setBounds(area.removeFromLeft(500));
 }
