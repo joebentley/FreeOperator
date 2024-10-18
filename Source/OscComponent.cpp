@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "OscComponent.h"
+#include "Constants.h"
 
 //==============================================================================
 OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int oscNumber) : oscNumber(oscNumber), parameters(parameters)
@@ -66,6 +67,9 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState &parameters, int o
     addAndMakeVisible(waveform);
     waveform.setLookAndFeel(&myLookAndFeel);
     
+    parameters.addParameterListener(parameterPrefix + "Waveform", this);
+    disableControlsForNoise();
+    
     if (oscNumber == 4) {
         addAndMakeVisible(attackLabel);
         addAndMakeVisible(decayLabel);
@@ -102,6 +106,8 @@ OscComponent::~OscComponent()
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     parameters.removeParameterListener(parameterPrefix + "Fixed", this);
+    parameters.removeParameterListener(parameterPrefix + "Waveform", this);
+    waveform.setLookAndFeel(nullptr);
 }
 
 void OscComponent::resized()
@@ -138,6 +144,21 @@ void OscComponent::parameterChanged (const juce::String& parameterID, float newV
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     if (parameterID == parameterPrefix + "Fixed")
         coarse.setEnabled(!fixedParameter->get());
+    else if (parameterID == parameterPrefix + "Waveform") {
+        disableControlsForNoise();
+    }
+}
+
+void OscComponent::disableControlsForNoise()
+{
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    auto wavfm = waveformFromString(dynamic_cast<juce::AudioParameterChoice*>(
+                  parameters.getParameter(parameterPrefix + "Waveform"))->getCurrentChoiceName());
+    
+    auto shouldDisable = wavfm == Waveform::Noise;
+    fine.setEnabled(!shouldDisable);
+    fixed.setEnabled(!shouldDisable);
+    coarse.setEnabled(!shouldDisable);
 }
 
 void OscComponents::resized()

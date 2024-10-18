@@ -25,6 +25,7 @@ public:
     void resized() override;
     
 private:
+    void disableControlsForNoise();
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     
     static constexpr int rotaryBoxWidth = 70;

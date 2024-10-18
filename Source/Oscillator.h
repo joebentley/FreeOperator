@@ -51,8 +51,10 @@ private:
     float amplitude = 1.0;
     float amplitudeOffset = 0.0;
     bool overdrivePhase = false;
+    Waveform waveform;
     
     juce::IIRFilter filter;
+    juce::Random random;
     
     JUCE_DECLARE_NON_COPYABLE(Oscillator)
 };

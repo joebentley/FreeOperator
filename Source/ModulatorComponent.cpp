@@ -38,6 +38,9 @@ ModulatorComponent::ModulatorComponent(juce::AudioProcessorValueTreeState &param
     oscNumLabel.setText(juce::String(oscNumber), juce::dontSendNotification);
     oscNumLabel.setFont(juce::FontOptions(20));
     
+    parameters.addParameterListener(parameterPrefix + "Waveform", this);
+    disableControlsForNoise();
+    
     if (oscNumber == 4) {
         addAndMakeVisible(coarseRandomLabel);
         addAndMakeVisible(fineRandomLabel);
@@ -55,6 +58,7 @@ ModulatorComponent::~ModulatorComponent()
 {
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     parameters.removeParameterListener(parameterPrefix + "Fixed", this);
+    parameters.removeParameterListener(parameterPrefix + "Waveform", this);
 }
 
 void ModulatorComponent::parameterChanged (const juce::String& parameterID, float newValue)
@@ -64,6 +68,20 @@ void ModulatorComponent::parameterChanged (const juce::String& parameterID, floa
     juce::String parameterPrefix = "osc" + juce::String(oscNumber);
     if (parameterID == parameterPrefix + "Fixed")
         coarseRandom.setEnabled(!fixedParameter->get());
+    else if (parameterID == parameterPrefix + "Waveform") {
+        disableControlsForNoise();
+    }
+}
+
+void ModulatorComponent::disableControlsForNoise()
+{
+    juce::String parameterPrefix = "osc" + juce::String(oscNumber);
+    auto wavfm = waveformFromString(dynamic_cast<juce::AudioParameterChoice*>(
+                  parameters.getParameter(parameterPrefix + "Waveform"))->getCurrentChoiceName());
+    
+    auto shouldDisable = wavfm == Waveform::Noise;
+    fineRandom.setEnabled(!shouldDisable);
+    coarseRandom.setEnabled(!shouldDisable);
 }
 
 void ModulatorComponent::resized()
@@ -178,12 +196,41 @@ ModulatorPitch::ModulatorPitch(juce::AudioProcessorValueTreeState &parameters) :
         oscAttachments[i] = std::make_unique<ButtonAttachment>(parameters, "pitchOsc" + juce::String(i+1), oscs[i]);
         addAndMakeVisible(oscLabels[i]);
         oscLabels[i].setText(juce::String(i+1), juce::dontSendNotification);
-//        oscLabels[i].setJustificationType(juce::Justification::centred);
+        
+        parameters.addParameterListener("osc" + juce::String(i+1) + "Waveform", this);
     }
+    
+    disableControlsForNoise();
 }
 
 ModulatorPitch::~ModulatorPitch()
 {
+    for (int i = 0; i < 4; ++i) {
+        parameters.removeParameterListener("osc" + juce::String(i+1) + "Waveform", this);
+    }
+}
+
+void ModulatorPitch::parameterChanged (const juce::String& parameterID, float newValue)
+{
+    if (parameterID == "osc1Waveform") {
+        disableControlsForNoise();
+    } else if (parameterID == "osc2Waveform") {
+        disableControlsForNoise();
+    } else if (parameterID == "osc3Waveform") {
+        disableControlsForNoise();
+    } else if (parameterID == "osc4Waveform") {
+        disableControlsForNoise();
+    }
+}
+
+void ModulatorPitch::disableControlsForNoise()
+{
+    for (int i = 0; i < 4; ++i) {
+        auto wavfm = waveformFromString(dynamic_cast<juce::AudioParameterChoice*>(
+              parameters.getParameter("osc" + juce::String(i+1) + "Waveform"))->getCurrentChoiceName());
+        
+        oscs[i].setEnabled(wavfm != Waveform::Noise);
+    }
 }
 
 void ModulatorPitch::resized()

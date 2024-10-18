@@ -16,10 +16,11 @@ static constexpr int WAVETABLE_SIZE = 256;
 
 enum class Waveform {
     Sine,
-    Saw
+    Saw,
+    Noise
 };
 
-constexpr std::initializer_list<const char*> WaveformStrings { "Sine", "Saw" };
+constexpr std::initializer_list<const char*> WaveformStrings { "Sine", "Saw", "Noise" };
 
 inline Waveform waveformFromString(const juce::String &string)
 {
@@ -27,6 +28,8 @@ inline Waveform waveformFromString(const juce::String &string)
         return Waveform::Sine;
     if (string == "Saw")
         return Waveform::Saw;
+    if (string == "Noise")
+        return Waveform::Noise;
     
     throw;
 }

@@ -24,6 +24,7 @@ public:
     void resized() override;
 
 private:
+    void disableControlsForNoise();
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     
     static constexpr int rotaryBoxWidth = 70;
@@ -60,6 +61,8 @@ private:
     ModulatorComponent mod2;
     ModulatorComponent mod3;
     ModulatorComponent mod4;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorComponents)
 };
 
 class ModulatorGlobal : public juce::Component
@@ -83,6 +86,8 @@ private:
     juce::Label timeRandomLabel;
 
     SequencerComponent sequencer;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorGlobal)
 };
 
 class ModulatorTab1 : public juce::Component
@@ -98,10 +103,12 @@ public:
 private:
     ModulatorComponents mods;
     ModulatorGlobal globalMod;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorTab1)
 };
 
 //================================ Tab 2 =======================================
-class ModulatorPitch : public juce::Component
+class ModulatorPitch : public juce::Component, public juce::AudioProcessorValueTreeState::Listener
 {
 using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
@@ -111,6 +118,9 @@ public:
     
     void resized() override;
 private:
+    void disableControlsForNoise();
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    
     juce::AudioProcessorValueTreeState &parameters;
     
     static constexpr int rotaryBoxWidth = 70;
@@ -124,6 +134,8 @@ private:
     juce::ToggleButton oscs[4];
     std::unique_ptr<ButtonAttachment> oscAttachments[4];
     juce::Label oscLabels[4];
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorPitch)
 };
 
 class ModulatorTab2 : public juce::Component
@@ -137,4 +149,6 @@ public:
     void resized() override;
 private:
     ModulatorPitch pitch;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ModulatorTab2)
 };
